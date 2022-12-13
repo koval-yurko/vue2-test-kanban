@@ -5,10 +5,8 @@ body {
   place-items: center;
   margin: 0;
   padding: 0;
-  color: var(--color-text);
   background: var(--color-background);
 
-  font-family: var(--font-family-main);
   font-size: 16px;
   line-height: 1.6;
 }

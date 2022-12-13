@@ -20,7 +20,7 @@ export default defineComponent({
   methods: {
     ...mapActions({
       toggleTheme: 'theme/toggleTheme'
-    }),
+    })
   },
 });
 </script>
