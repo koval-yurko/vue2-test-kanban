@@ -1,6 +1,6 @@
 <template>
   <div class="demo">
-    Demo {{theme}}
+    Demo {{ theme }}
 
     <button @click="toggleTheme()">Toggle</button>
   </div>
@@ -14,17 +14,15 @@ export default defineComponent({
   name: "DemoPage",
   computed: {
     ...mapGetters({
-      theme: 'theme/activeTheme'
+      theme: "theme/activeTheme",
     }),
   },
   methods: {
     ...mapActions({
-      toggleTheme: 'theme/toggleTheme'
-    })
+      toggleTheme: "theme/toggleTheme",
+    }),
   },
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

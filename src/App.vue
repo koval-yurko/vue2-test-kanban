@@ -7,7 +7,7 @@ import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 
 type AppProps = {
-  theme: string,
+  theme: string;
   setThemeAttribute(): void;
 };
 
@@ -20,7 +20,7 @@ export default defineComponent<AppProps, AppProps>({
   },
   computed: {
     ...mapGetters({
-      theme: 'theme/activeTheme'
+      theme: "theme/activeTheme",
     }),
   },
   methods: {
@@ -38,6 +38,4 @@ export default defineComponent<AppProps, AppProps>({
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
