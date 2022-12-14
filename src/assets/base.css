@@ -63,6 +63,11 @@
   --sidebar-width: 300px;
   --sidebar-width-n: -300px;
 
+  --sidebar-menu-color: var(--color-gray-4);
+  --sidebar-menu-color-hover: var(--color-primary);
+  --sidebar-menu-bg-color-hover: var(--color-primary-10);
+  --sidebar-menu-color-active: var(--color-gray-1);
+  --sidebar-menu-bg-color-active: var(--color-primary);
 }
 
 :root[data-theme="white"],
@@ -96,6 +101,8 @@
   --header-border-color: var(--color-gray-3);
 
   --sidebar-bg-color: var(--color-gray-1);
+
+  --sidebar-menu-bg-color-hover: var(--color-primary-10);
 }
 
 :root[data-theme="black"],
@@ -129,6 +136,8 @@
   --header-border-color: var(--color-gray-5);
 
   --sidebar-bg-color: var(--color-gray-6);
+
+  --sidebar-menu-bg-color-hover: var(--color-gray-1);
 }
 
 @font-face {

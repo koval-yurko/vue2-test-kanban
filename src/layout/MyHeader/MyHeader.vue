@@ -81,7 +81,9 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   display: flex;
   align-items: center;
   width: var(--sidebar-width);
+  padding-left: 33px;
   border-right: solid 1px var(--header-border-color);
+  box-sizing: border-box;
 }
 
 .my-header_menu-holder {
