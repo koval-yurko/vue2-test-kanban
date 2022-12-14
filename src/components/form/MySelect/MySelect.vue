@@ -1,12 +1,12 @@
 <template>
-  <div class="my-input" :class="{ 'my-input__error': error }">
-    <div class="my-input_label-wrapper">
-      <label :for="forId" v-if="label" class="my-input_label">{{
+  <div class="my-select" :class="{ 'has-error': error }">
+    <div class="my-select_label-wrapper">
+      <label :for="forId" v-if="label" class="my-select_label">{{
         label
       }}</label>
     </div>
-    <div class="my-input_input-wrapper">
-      <input
+    <div class="my-select_input-wrapper">
+      <select
         :id="forId"
         v-bind="$attrs"
         v-on="$listeners"
@@ -16,9 +16,14 @@
             value = newValue.target.value;
           }
         "
-        class="my-input_input"
-      />
-      <span v-if="error" class="my-input_error">{{ error }}</span>
+        class="my-select_input"
+      >
+        <option v-for="option of options" :value="option.id" :key="option.id">
+          {{ option.label }}
+        </option>
+      </select>
+      <my-select-icon class="my-select_input-icon"></my-select-icon>
+      <span v-if="error" class="my-select_error">{{ error }}</span>
     </div>
   </div>
 </template>
@@ -26,16 +31,24 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
+import MySelectIcon from "@/components/icons/MySelectIcon.vue";
 
-type MyButtonProps = {
+export type MySelectOption = {
+  id: string;
+  label: string;
+};
+
+type MySelectProps = {
   id?: boolean;
   label?: string;
   error?: string;
   value: string;
+  options: MySelectOption[];
 };
 
-export default defineComponent<MyButtonProps, MyButtonProps>({
-  name: "MyInput",
+export default defineComponent<MySelectProps, MySelectProps>({
+  name: "MySelect",
+  components: { MySelectIcon },
   props: {
     id: {
       type: String as PropType<string>,
@@ -48,6 +61,10 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
     error: {
       type: String as PropType<string>,
       required: false,
+    },
+    options: {
+      type: Array as PropType<MySelectOption[]>,
+      required: true,
     },
   },
   data() {
@@ -72,28 +89,28 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
 </script>
 
 <style>
-.my-input {
+.my-select {
   display: inline-flex;
   flex-direction: column;
   max-width: 100%;
 }
 
-.my-input_label-wrapper {
+.my-select_label-wrapper {
   padding-bottom: 4px;
 }
 
-.my-input_label {
+.my-select_label {
   font-size: 12px;
   line-height: 17px;
   color: var(--input-color-label);
 }
 
-.my-input_input-wrapper {
+.my-select_input-wrapper {
   position: relative;
   max-width: 100%;
 }
 
-.my-input_input {
+.my-select_input {
   appearance: none;
   background: none;
   max-width: 100%;
@@ -104,23 +121,27 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   color: var(--input-color);
   border: solid 1px var(--input-color-border);
   border-radius: 4px;
+  cursor: pointer;
+  text-overflow: ellipsis;
 }
-.my-input_input:focus {
+.my-select_input::-ms-expand {
+  display: none;
+}
+
+.my-select_input-icon {
+  position: absolute;
+  top: 17px;
+  right: 16px;
+  display: block;
+  color: var(--input-color-border-focus);
+  cursor: pointer;
+}
+
+.my-select_input:focus {
   border-color: var(--input-color-border-focus);
 }
-.my-input_input:focus-visible {
+.my-select_input:focus-visible {
   outline: none;
   border-color: var(--input-color-border-focus);
-}
-
-.my-input_error {
-  position: absolute;
-  top: 8px;
-  right: 16px;
-  color: var(--input-color-error);
-}
-
-.my-input__error .my-input_input {
-  border: solid 1px var(--input-color-border-error);
 }
 </style>

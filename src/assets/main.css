@@ -5,10 +5,12 @@ body {
   place-items: center;
   margin: 0;
   padding: 0;
-  background: var(--color-background);
+  color: var(--text-color);
+  background: var(--bg-color);
 
-  font-size: 16px;
-  line-height: 1.6;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
 }
 
 h2 {
@@ -17,4 +19,14 @@ h2 {
 
 p {
   margin: 0 0 10px 0;
+}
+
+::placeholder {
+  color: var(--input-color-label);
+  opacity: 0.5;
+}
+
+::-ms-input-placeholder {
+  color: var(--input-color-label);
+  opacity: 0.5;
 }

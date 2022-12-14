@@ -1,11 +1,130 @@
 :root {
-  --color-background: var(--main);
+  --color-primary: rgba(99, 95, 199, 1);         /* #635FC7 */
+  --color-primary-light: rgba(168, 164, 255, 1); /* #A8A4FF */
+  --color-primary-10: rgba(99, 95, 199, 0.1);
+  --color-primary-25: rgba(99, 95, 199, 0.25);
+
+  --color-destructive: rgba(234, 85, 85, 1);          /* #EA5555 */
+  --color-destructive-light: rgba(255, 152, 152, 1);  /* #FF9898 */
+
+  --color-gray-1: #FFFFFF;  /* White */
+  --color-gray-2: #F4F7FD;  /* Lines Grey (Light BG) */
+  --color-gray-3: #E4EBFA;  /* Lines (Light) */
+  --color-gray-4: #828FA3;  /* Medium grey */
+  --color-gray-5: #3E3F4E;  /* Lines (Dark) */
+  --color-gray-6: #2B2C37;  /* Dark Grey */
+  --color-gray-7: #20212C;  /* Very Dark Grey */
+  --color-gray-8: #000112;  /* Black */
+
+  --buttom-primary-color: var(--color-gray-1);
+  --buttom-primary-bg-color: var(--color-primary);
+  --buttom-primary-bg-color-hover: var(--color-primary-light);
+
+  --buttom-secondary-color: var(--color-primary);
+  --buttom-secondary-bg-color: var(--color-primary-10);
+  --buttom-secondary-bg-color-hover: var(--color-primary-25);
+
+  --buttom-destructive-color: var(--color-gray-1);
+  --buttom-destructive-bg-color: var(--color-destructive);
+  --buttom-destructive-bg-color-hover: var(--color-destructive-light);
+
+  --input-font-size: 13px;
+  --input-line-height: 23px;
+  --input-color: var(--color-gray-8);
+  --input-color-label: var(--color-gray-4);
+  --input-color-error: var(--color-destructive);
+  --input-color-placeholder: var(--color-gray-3);
+  --input-color-border: var(--color-gray-3);
+  --input-color-border-focus: var(--color-primary);
+  --input-color-border-error: var(--color-destructive);
+
+  --checkbox-color: var(--color-gray-8);
+  --checkbox-color-checked: var(--color-gray-4);
+  --checkbox-bg-color: var(--color-gray-2);
+  --checkbox-bg-color-hover: var(--color-primary-25);
+  --checkbox-mark-color: var(--color-gray-1);
+  --checkbox-mark-bg-color: var(--color-gray-1);
+  --checkbox-mark-border-color: var(--color-gray-3);
+  --checkbox-mark-bg-color-checked: var(--color-primary);
+  --checkbox-mark-border-color-checked: var(--color-primary);
+
+  --font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  --font-size: 13px;
+  --line-height: 23px;
+
+  --text-color: var(--color-gray-6);
+  --bg-color: var(--color-gray-1);
+
 }
 
-:root[data-theme="white"] {
-  --main: #fff;
+:root[data-theme="white"],
+:root [data-theme="white"] {
+  --text-color: var(--color-gray-6);
+  --bg-color: var(--color-gray-1);
+
+  --buttom-secondary-color: var(--color-primary);
+  --buttom-secondary-bg-color: var(--color-primary-10);
+  --buttom-secondary-bg-color-hover: var(--color-primary-25);
+
+  --input-color: var(--color-gray-8);
+  --input-color-label: var(--color-gray-4);
+  --input-color-error: var(--color-destructive);
+  --input-color-placeholder: var(--color-gray-3);
+  --input-color-border: var(--color-gray-3);
+  --input-color-border-focus: var(--color-primary);
+  --input-color-border-error: var(--color-destructive);
+
+  --checkbox-color: var(--color-gray-8);
+  --checkbox-color-checked: var(--color-gray-4);
+  --checkbox-bg-color: var(--color-gray-2);
+  --checkbox-bg-color-hover: var(--color-primary-25);
+  --checkbox-mark-color: var(--color-gray-1);
+  --checkbox-mark-bg-color: var(--color-gray-1);
+  --checkbox-mark-border-color: var(--color-gray-3);
+  --checkbox-mark-bg-color-checked: var(--color-primary);
+  --checkbox-mark-border-color-checked: var(--color-primary);
 }
 
-:root[data-theme="black"] {
-  --main: #000;
+:root[data-theme="black"],
+:root [data-theme="black"] {
+  --text-color: var(--color-gray-1);
+  --bg-color: var(--color-gray-6);
+
+  --buttom-secondary-color: var(--color-primary);
+  --buttom-secondary-bg-color: var(--color-gray-1);
+  --buttom-secondary-bg-color-hover: var(--color-gray-2);
+
+  --input-color: var(--color-gray-1);
+  --input-color-label: var(--color-gray-1);
+  --input-color-error: var(--color-destructive);
+  --input-color-placeholder: var(--color-gray-5);
+  --input-color-border: var(--color-gray-5);
+  --input-color-border-focus: var(--color-primary);
+  --input-color-border-error: var(--color-destructive);
+
+  --checkbox-color: var(--color-gray-1);
+  --checkbox-color-checked: var(--color-gray-4);
+  --checkbox-bg-color: var(--color-gray-7);
+  --checkbox-bg-color-hover: var(--color-primary-25);
+  --checkbox-mark-color: var(--color-gray-1);
+  --checkbox-mark-bg-color: var(--color-gray-6);
+  --checkbox-mark-border-color: var(--color-gray-5);
+  --checkbox-mark-bg-color-checked: var(--color-primary);
+  --checkbox-mark-border-color-checked: var(--color-primary);
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/plusjakartadisplay-medium.woff2') format('woff2'),
+  url('./fonts/plusjakartadisplay-medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/plusjakartadisplay-bold.woff2') format('woff2'),
+  url('./fonts/plusjakartadisplay-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
