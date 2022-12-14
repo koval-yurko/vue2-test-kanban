@@ -15,3 +15,6 @@ yarn dev
 ```sh
 dev build
 ```
+
+### Demo
+https://failwin.github.io/vue2-test-kanban/
