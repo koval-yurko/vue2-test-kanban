@@ -1,16 +1,10 @@
-import Vuex from "vuex";
 import type { ActionContext } from "vuex";
+import { THEME_WHITE, THEME_BLACK } from "./types";
+import type { ThemeState, RootState } from "./types";
 
 const MUTATION_TOGGLE_THEME = "MUTATION_TOGGLE_THEME";
 
-const THEME_WHITE = "white";
-const THEME_BLACK = "black";
-
-type ThemeState = {
-  theme: typeof THEME_WHITE | typeof THEME_BLACK;
-};
-
-type ThemeContext = ActionContext<ThemeState, ThemeState>;
+type ThemeContext = ActionContext<ThemeState, RootState>;
 
 export default {
   namespaced: true,
