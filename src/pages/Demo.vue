@@ -45,6 +45,10 @@
         >
       </MyCheckboxGroup>
       {{ checkboxValue }}
+
+      <br />
+      <MyModal :show="modal" />
+      <button @click="modal = !modal">modal</button>
     </div>
 
     <div class="section" data-theme="black">
@@ -99,6 +103,7 @@ import { MyButton } from "@/components/form/MyButton";
 import { MyInput } from "@/components/form/MyInput";
 import { MySelect } from "@/components/form/MySelect";
 import { MyCheckboxGroup, MyCheckbox } from "@/components/form/MyCheckboxGroup";
+import { MyModal } from "@/components/MyModal";
 
 export default defineComponent({
   name: "DemoPage",
@@ -108,6 +113,7 @@ export default defineComponent({
     MySelect,
     MyCheckboxGroup,
     MyCheckbox,
+    MyModal,
   },
   data() {
     return {
@@ -126,6 +132,7 @@ export default defineComponent({
         { id: "option 2", label: "Option 2 Option 2 Option 2" },
         { id: "option 3", label: "Option 3" },
       ],
+      modal: false,
     };
   },
   computed: {

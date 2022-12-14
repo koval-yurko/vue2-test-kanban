@@ -66,7 +66,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
 }
 
 .my-button__size-large {
-  padding: 14px 30px 15px;
+  padding: 14px 24px 15px;
   font-size: 15px;
   line-height: 19px;
   border-radius: 24px;

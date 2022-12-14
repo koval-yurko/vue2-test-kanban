@@ -66,7 +66,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   bottom: 0;
   left: 0;
   width: var(--sidebar-width);
-  border: solid 1px black;
+  background: var(--sidebar-bg-color);
 
   transition: left 0.3s ease;
 }

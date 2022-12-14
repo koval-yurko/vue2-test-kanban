@@ -55,9 +55,14 @@
   --text-color: var(--color-gray-6);
   --bg-color: var(--color-gray-2);
 
-  --header-height: 100px;
+  --header-height: 96px;
+  --header-bg-color: var(--color-gray-1);
+  --header-border-color: var(--color-gray-3);
+
+  --sidebar-bg-color: var(--color-gray-1);
   --sidebar-width: 300px;
   --sidebar-width-n: -300px;
+
 }
 
 :root[data-theme="white"],
@@ -86,6 +91,11 @@
   --checkbox-mark-border-color: var(--color-gray-3);
   --checkbox-mark-bg-color-checked: var(--color-primary);
   --checkbox-mark-border-color-checked: var(--color-primary);
+
+  --header-bg-color: var(--color-gray-1);
+  --header-border-color: var(--color-gray-3);
+
+  --sidebar-bg-color: var(--color-gray-1);
 }
 
 :root[data-theme="black"],
@@ -114,6 +124,11 @@
   --checkbox-mark-border-color: var(--color-gray-5);
   --checkbox-mark-bg-color-checked: var(--color-primary);
   --checkbox-mark-border-color-checked: var(--color-primary);
+
+  --header-bg-color: var(--color-gray-6);
+  --header-border-color: var(--color-gray-5);
+
+  --sidebar-bg-color: var(--color-gray-6);
 }
 
 @font-face {
