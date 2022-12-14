@@ -27,6 +27,11 @@ type MyRadioProps = {
   inputClass?: string;
   labelClass?: string;
   $radioGroup?: typeof MyRadioGroup;
+
+  onChange(): void;
+  forId: string;
+  name: string;
+  isChecked: boolean;
 };
 
 export default defineComponent<MyRadioProps, MyRadioProps>({

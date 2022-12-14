@@ -11,11 +11,7 @@
         v-bind="$attrs"
         v-on="$listeners"
         :value="value"
-        @input="
-          (newValue) => {
-            value = newValue.target.value;
-          }
-        "
+        @input="onChange"
         class="my-input_input"
       />
       <span v-if="error" class="my-input_error">{{ error }}</span>
@@ -32,6 +28,9 @@ type MyButtonProps = {
   label?: string;
   error?: string;
   value: string;
+
+  onChange(events: Event): void;
+  forId: string;
 };
 
 export default defineComponent<MyButtonProps, MyButtonProps>({
@@ -54,6 +53,12 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
     return {
       value: this.$attrs.value,
     };
+  },
+  methods: {
+    onChange(event: Event) {
+      const el = event.target as HTMLInputElement;
+      this.value = el.value;
+    },
   },
   computed: {
     forId() {

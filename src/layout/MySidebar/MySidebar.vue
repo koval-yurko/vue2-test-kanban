@@ -25,6 +25,11 @@ type Color = "primary" | "secondary" | "destructive";
 type MyButtonProps = {
   size?: Size;
   color?: Color;
+
+  sidebarVisible: boolean;
+  theme: string;
+  toggleSidebar(): void;
+  toggleTheme(): void;
 };
 
 export default defineComponent<MyButtonProps, MyButtonProps>({

@@ -31,6 +31,11 @@ type MyCheckboxProps = {
   inputClass?: string;
   labelClass?: string;
   $checkboxGroup?: typeof MyCheckboxGroup;
+
+  onChange(): void;
+  forId: string;
+  isChecked: boolean;
+  name: string;
 };
 
 export default defineComponent<MyCheckboxProps, MyCheckboxProps>({

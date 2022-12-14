@@ -15,6 +15,8 @@ type Color = "primary" | "secondary" | "destructive";
 type MyButtonProps = {
   size?: Size;
   color?: Color;
+
+  classObj: Record<string, string>;
 };
 
 export default defineComponent<MyButtonProps, MyButtonProps>({

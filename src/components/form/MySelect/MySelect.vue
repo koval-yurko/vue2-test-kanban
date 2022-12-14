@@ -11,11 +11,7 @@
         v-bind="$attrs"
         v-on="$listeners"
         :value="value"
-        @input="
-          (newValue) => {
-            value = newValue.target.value;
-          }
-        "
+        @input="onChange"
         class="my-select_input"
       >
         <option v-for="option of options" :value="option.id" :key="option.id">
@@ -44,6 +40,9 @@ type MySelectProps = {
   error?: string;
   value: string;
   options: MySelectOption[];
+
+  onChange(events: Event): void;
+  forId: string;
 };
 
 export default defineComponent<MySelectProps, MySelectProps>({
@@ -71,6 +70,12 @@ export default defineComponent<MySelectProps, MySelectProps>({
     return {
       value: this.$attrs.value,
     };
+  },
+  methods: {
+    onChange(event: Event) {
+      const el = event.target as HTMLInputElement;
+      this.value = el.value;
+    },
   },
   computed: {
     forId() {
