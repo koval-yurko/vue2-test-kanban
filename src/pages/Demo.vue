@@ -157,11 +157,11 @@ export default defineComponent({
 }
 .section[data-theme="white"] {
   color: var(--text-color);
-  background: var(--bg-color);
+  background: var(--bg-2-color);
 }
 
 .section[data-theme="black"] {
   color: var(--text-color);
-  background: var(--bg-color);
+  background: var(--bg-2-color);
 }
 </style>
