@@ -7,6 +7,7 @@ Vue.use(Router);
 
 export default new Router({
   mode: "history",
+  base: import.meta.env.VITE_BASE_PATH,
   routes: [
     { path: "/", component: Home },
     { path: "/demo", component: Demo },
