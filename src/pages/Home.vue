@@ -6,9 +6,6 @@
       <my-sidebar />
 
       <div class="my-content">
-        <div>
-          <button @click="toggleSidebar">toggle</button>
-        </div>
         <div class="columns">
           <div class="column">
             <div class="row">Column 1 Row 1</div>

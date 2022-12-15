@@ -36,14 +36,6 @@ body {
   letter-spacing: 2px;
 }
 
-h2 {
-  margin: 0;
-}
-
-p {
-  margin: 0 0 10px 0;
-}
-
 ::placeholder {
   color: var(--input-color-label);
   opacity: 0.5;
@@ -52,4 +44,20 @@ p {
 ::-ms-input-placeholder {
   color: var(--input-color-label);
   opacity: 0.5;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .h1 {
+    font-size: 20px;
+    line-height: 35px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .h1 {
+    font-size: 18px;
+    line-height: 23px;
+  }
 }

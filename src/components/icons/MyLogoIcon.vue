@@ -63,7 +63,12 @@ export default defineComponent<MyLogoIconProps, MyLogoIconProps>({
 .my-logo-icon_text {
 }
 
-@media (max-width: 800px) {
+/* Tablet */
+@media (max-width: 900px) {
+}
+
+/* Mobile */
+@media (max-width: 700px) {
   .my-logo-icon {
     width: 24px;
   }

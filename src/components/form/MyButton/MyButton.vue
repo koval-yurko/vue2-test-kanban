@@ -1,5 +1,11 @@
 <template>
-  <button class="my-button" :class="classObj" v-bind="$attrs" v-on="$listeners">
+  <button
+    class="my-button"
+    :class="classObj"
+    v-bind="$attrs"
+    v-on="$listeners"
+    :disabled="disabled"
+  >
     <slot></slot>
   </button>
 </template>
@@ -15,6 +21,7 @@ type Color = "primary" | "secondary" | "destructive";
 type MyButtonProps = {
   size?: Size;
   color?: Color;
+  disabled?: boolean;
 
   classObj: Record<string, string>;
 };
@@ -31,6 +38,11 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
       type: String as PropType<Color>,
       required: false,
       default: "primary",
+    },
+    disabled: {
+      type: Boolean as PropType<boolean>,
+      required: false,
+      default: false,
     },
   },
   computed: {
@@ -59,12 +71,17 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   transition: background-color 0.3s ease;
 }
 
-.my-button:hover {
+.my-button:hover:not(:disabled) {
   background: var(--buttom-primary-bg-color-hover);
 }
 
 .my-button:focus-visible {
   outline-width: 1px;
+}
+
+.my-button:disabled {
+  cursor: default;
+  opacity: 0.25;
 }
 
 .my-button__size-large {
@@ -78,7 +95,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   color: var(--buttom-secondary-color);
   background: var(--buttom-secondary-bg-color);
 }
-.my-button__color-secondary:hover {
+.my-button__color-secondary:hover:not(:disabled) {
   background: var(--buttom-secondary-bg-color-hover);
 }
 
@@ -86,7 +103,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   color: var(--buttom-destructive-color);
   background: var(--buttom-destructive-bg-color);
 }
-.my-button__color-destructive:hover {
+.my-button__color-destructive:hover:not(:disabled) {
   background: var(--buttom-destructive-bg-color-hover);
 }
 </style>

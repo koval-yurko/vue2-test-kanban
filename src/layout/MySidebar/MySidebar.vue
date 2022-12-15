@@ -273,4 +273,11 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
 .my-sidebar__hidden .my-sidebar_spacer {
   width: 0;
 }
+
+/* Mobile */
+@media (max-width: 700px) {
+  .my-sidebar {
+    display: none;
+  }
+}
 </style>
