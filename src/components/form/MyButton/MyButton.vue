@@ -22,6 +22,7 @@ type MyButtonProps = {
   size?: Size;
   color?: Color;
   disabled?: boolean;
+  fullWidth?: boolean;
 
   classObj: Record<string, string>;
 };
@@ -44,10 +45,16 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
       required: false,
       default: false,
     },
+    fullWidth: {
+      type: Boolean as PropType<boolean>,
+      required: false,
+    },
   },
   computed: {
     classObj() {
-      return `my-button__size-${this.size} my-button__color-${this.color}`;
+      return `my-button__size-${this.size} my-button__color-${this.color} ${
+        this.fullWidth ? "my-button__full-width" : ""
+      }`;
     },
   },
 });
@@ -105,5 +112,9 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
 }
 .my-button__color-destructive:hover:not(:disabled) {
   background: var(--buttom-destructive-bg-color-hover);
+}
+
+.my-button__full-width {
+  width: 100%;
 }
 </style>

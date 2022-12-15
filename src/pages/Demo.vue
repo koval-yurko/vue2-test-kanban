@@ -27,6 +27,16 @@
 
       <br />
       <br />
+      <MyInputsList
+        class="list-list"
+        label="Some label"
+        v-model="inputList"
+        add-text="+ Add New Subtask"
+      />
+      {{ inputList }}
+
+      <br />
+      <br />
       <MySelect
         :options="selectOptions"
         v-model="selectValue"
@@ -47,8 +57,19 @@
       {{ checkboxValue }}
 
       <br />
-      <MyModal :show="modal" />
+      <br />
+      <MyModal :show="modal" @close="modal = !modal">
+        <MyModalBox>some text</MyModalBox>
+      </MyModal>
       <button @click="modal = !modal">modal</button>
+
+      <br />
+      <br />
+      <div class="modal-bg">
+        <MyDashboardEditModal />
+        <br />
+        <MyDashboardDeleteModal />
+      </div>
     </div>
 
     <div class="section" data-theme="black">
@@ -103,7 +124,10 @@ import { MyButton } from "@/components/form/MyButton";
 import { MyInput } from "@/components/form/MyInput";
 import { MySelect } from "@/components/form/MySelect";
 import { MyCheckboxGroup, MyCheckbox } from "@/components/form/MyCheckboxGroup";
-import { MyModal } from "@/components/MyModal";
+import { MyInputsList } from "@/components/form/MyInputsList";
+import { MyModal, MyModalBox } from "@/components/MyModal";
+import MyDashboardEditModal from "@/modals/MyDashboardEditModal.vue";
+import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
 
 export default defineComponent({
   name: "DemoPage",
@@ -113,7 +137,11 @@ export default defineComponent({
     MySelect,
     MyCheckboxGroup,
     MyCheckbox,
+    MyInputsList,
     MyModal,
+    MyModalBox,
+    MyDashboardEditModal,
+    MyDashboardDeleteModal,
   },
   data() {
     return {
@@ -132,6 +160,7 @@ export default defineComponent({
         { id: "option 2", label: "Option 2 Option 2 Option 2" },
         { id: "option 3", label: "Option 3" },
       ],
+      inputList: ["aaa", "bbb"],
       modal: false,
     };
   },
@@ -155,9 +184,21 @@ export default defineComponent({
 .section {
   padding: 10px;
 }
+.modal-bg {
+  padding: 30px;
+}
+.list-list {
+  width: 100%;
+  max-width: 500px;
+}
+
 .section[data-theme="white"] {
   color: var(--text-color);
   background: var(--bg-2-color);
+}
+
+.section[data-theme="white"] .modal-bg {
+  background: var(--color-gray-4);
 }
 
 .section[data-theme="black"] {

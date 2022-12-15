@@ -44,14 +44,14 @@ type Size = "small" | "large";
 
 type Color = "primary" | "secondary" | "destructive";
 
-type MyButtonProps = {
+type MyHeaderProps = {
   size?: Size;
   color?: Color;
 
   sidebarVisible: boolean;
 };
 
-export default defineComponent<MyButtonProps, MyButtonProps>({
+export default defineComponent<MyHeaderProps, MyHeaderProps>({
   name: "MyHeader",
   components: { MyLogoIcon, MyMenuIcon, MyPlusIcon, MyButton },
   props: {

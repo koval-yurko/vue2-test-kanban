@@ -6,7 +6,7 @@ import Demo from "./pages/Demo.vue";
 Vue.use(Router);
 
 export default new Router({
-  mode: "history",
+  mode: "hash",
   base: import.meta.env.VITE_BASE_PATH,
   routes: [
     { path: "/", component: Home },

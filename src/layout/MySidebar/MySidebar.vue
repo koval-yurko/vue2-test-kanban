@@ -80,7 +80,7 @@ type Size = "small" | "large";
 
 type Color = "primary" | "secondary" | "destructive";
 
-type MyButtonProps = {
+type MySidebarProps = {
   size?: Size;
   color?: Color;
 
@@ -90,7 +90,7 @@ type MyButtonProps = {
   toggleTheme(): void;
 };
 
-export default defineComponent<MyButtonProps, MyButtonProps>({
+export default defineComponent<MySidebarProps, MySidebarProps>({
   name: "MySidebar",
   components: {
     MyButton,
@@ -143,7 +143,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   background: var(--sidebar-bg-color);
 
   transition: left 0.3s ease;
-  z-index: 50;
+  z-index: var(--z-index-sidebar-show);
 }
 
 .my-sidebar_spacer {
@@ -214,7 +214,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   position: fixed;
   bottom: 33px;
   left: 0;
-  z-index: 40;
+  z-index: var(--z-index-sidebar);
 }
 
 .my-sidebar_toggle-button {

@@ -18,9 +18,19 @@ body {
   line-height: var(--line-height);
 }
 
+p {
+  margin: 5px 0 10px;
+}
+
 .h1 {
   font-size: 24px;
   line-height: 30px;
+  font-weight: bold;
+}
+
+.h2 {
+  font-size: 18px;
+  line-height: 23px;
   font-weight: bold;
 }
 

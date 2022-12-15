@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <Teleport to="body">
-      <transition name="modal-a">
-        <div v-if="isVisible" class="cont" key="aaa">
-          MODAL <br />
-          <button @click="isVisible = !isVisible">toggle</button>
+  <Teleport to="body">
+    <transition name="my-modal">
+      <div v-if="show" class="my-modal" key="my-modal">
+        <div class="my-modal_overlay" @click.prevent="onClose"></div>
+        <div class="my-modal_content" @click.prevent="onClose">
+          <slot></slot>
         </div>
-      </transition>
-    </Teleport>
-  </div>
+      </div>
+    </transition>
+  </Teleport>
 </template>
 
 <script lang="ts">
@@ -16,12 +16,11 @@ import { defineComponent } from "vue";
 import Teleport from "vue2-teleport";
 import type { PropType } from "vue";
 
-type MyButtonProps = {
+type MyModalProps = {
   show: boolean;
-  isVisible: boolean;
 };
 
-export default defineComponent<MyButtonProps, MyButtonProps>({
+export default defineComponent<MyModalProps, MyModalProps>({
   name: "MyModal",
   components: { Teleport },
   props: {
@@ -31,46 +30,64 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
       default: false,
     },
   },
-  data() {
-    return {
-      isVisible: this.show,
-    };
-  },
-  watch: {
-    show() {
-      this.isVisible = this.show;
+  methods: {
+    onClose() {
+      this.$emit("close");
     },
   },
+  emits: ["close"],
 });
 </script>
 
 <style>
-.cont {
+.my-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
 
-  background: #ccc;
   opacity: 1;
+  z-index: var(--z-index-modal);
 }
 
-.modal-a-enter-active {
-  transition: all 0.3s ease-out;
+.my-modal_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--modal-overlay-bg-color);
+  opacity: 0.5;
+}
+
+.my-modal_content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: var(--z-index-modal-content);
+}
+
+.my-modal-enter-active {
+  transition: all 0.2s ease-out;
   opacity: 0;
 }
 
-.modal-a-enter-to {
+.my-modal-enter-to {
   opacity: 1;
 }
 
-.modal-a-leave-active {
-  transition: all 0.3s ease-out;
+.my-modal-leave-active {
+  transition: all 0.2s ease-out;
   opacity: 1;
 }
 
-.modal-a-leave-to {
+.my-modal-leave-to {
   opacity: 0;
 }
 </style>

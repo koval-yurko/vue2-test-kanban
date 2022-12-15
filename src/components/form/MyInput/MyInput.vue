@@ -1,5 +1,8 @@
 <template>
-  <div class="my-input" :class="{ 'my-input__error': error }">
+  <div
+    class="my-input"
+    :class="{ 'my-input__error': error, 'my-input__full-width': fullWidth }"
+  >
     <div class="my-input_label-wrapper">
       <label :for="forId" v-if="label" class="my-input_label">{{
         label
@@ -13,6 +16,7 @@
         :value="value"
         @input="onChange"
         class="my-input_input"
+        ref="input"
       />
       <span v-if="error" class="my-input_error">{{ error }}</span>
     </div>
@@ -23,17 +27,19 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 
-type MyButtonProps = {
+type MyInputProps = {
   id?: boolean;
   label?: string;
   error?: string;
+  fullWidth?: boolean;
   value: string;
 
   onChange(events: Event): void;
+  focus(): void;
   forId: string;
 };
 
-export default defineComponent<MyButtonProps, MyButtonProps>({
+export default defineComponent<MyInputProps, MyInputProps>({
   name: "MyInput",
   props: {
     id: {
@@ -48,6 +54,10 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
       type: String as PropType<string>,
       required: false,
     },
+    fullWidth: {
+      type: Boolean as PropType<boolean>,
+      required: false,
+    },
   },
   data() {
     return {
@@ -58,6 +68,12 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
     onChange(event: Event) {
       const el = event.target as HTMLInputElement;
       this.value = el.value;
+    },
+    focus() {
+      if (this.$refs.input) {
+        const input = this.$refs.input as HTMLInputElement;
+        input.focus();
+      }
     },
   },
   computed: {
@@ -103,6 +119,7 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
   background: none;
   max-width: 100%;
   padding: 7px 38px 8px 16px;
+  box-sizing: border-box;
   font-family: var(--font-family);
   font-size: var(--font-size);
   line-height: var(--line-height);
@@ -127,5 +144,12 @@ export default defineComponent<MyButtonProps, MyButtonProps>({
 
 .my-input__error .my-input_input {
   border: solid 1px var(--input-color-border-error);
+}
+
+.my-input__full-width {
+  width: 100%;
+}
+.my-input__full-width .my-input_input {
+  width: 100%;
 }
 </style>

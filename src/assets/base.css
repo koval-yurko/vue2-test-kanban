@@ -74,6 +74,20 @@
   --theme-toggle-bg-color: var(--color-gray-2);
   --theme-toggle-button-color: var(--color-gray-1);
   --theme-toggle-button-bg-color: var(--color-primary);
+
+  --modal-overlay-bg-color: var(--color-gray-8);
+  --modal-box-bg-color: var(--color-gray-1);
+  --modal-box-title-color: var(--color-gray-8);
+  --modal-box-title-color-delete: var(--color-destructive);
+  --modal-box-text-color: var(--color-gray-4);
+
+  --btn-close-color: var(--color-gray-4);
+  --btn-close-color-hover: var(--color-destructive);
+
+  --z-index-sidebar: 40;
+  --z-index-sidebar-show: 50;
+  --z-index-modal: 100;
+  --z-index-modal-content: 110;
 }
 
 :root[data-theme="white"],
