@@ -1,5 +1,11 @@
 <template>
-  <div class="my-checkbox-group">
+  <div
+    class="my-checkbox-group"
+    :class="{ 'my-checkbox-group__full-width': fullWidth }"
+  >
+    <div class="my-checkbox-group_label-wrapper">
+      <label v-if="label" class="my-checkbox-group_label">{{ label }}</label>
+    </div>
     <slot></slot>
   </div>
 </template>
@@ -11,6 +17,8 @@ import type { PropType } from "vue";
 type MyCheckboxGroupProps = {
   value: string[];
   name: string;
+  label?: string;
+  fullWidth?: boolean;
 };
 
 export default defineComponent<MyCheckboxGroupProps, MyCheckboxGroupProps>({
@@ -19,6 +27,14 @@ export default defineComponent<MyCheckboxGroupProps, MyCheckboxGroupProps>({
     name: {
       type: String as PropType<string>,
       required: true,
+    },
+    label: {
+      type: String as PropType<string>,
+      required: false,
+    },
+    fullWidth: {
+      type: Boolean as PropType<boolean>,
+      required: false,
     },
   },
   data() {
@@ -57,5 +73,19 @@ export default defineComponent<MyCheckboxGroupProps, MyCheckboxGroupProps>({
 .my-checkbox-group {
   display: inline-flex;
   flex-direction: column;
+}
+
+.my-checkbox-group__full-width {
+  display: flex;
+}
+
+.my-checkbox-group_label-wrapper {
+  padding-bottom: 4px;
+}
+
+.my-checkbox-group_label {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--input-color-label);
 }
 </style>

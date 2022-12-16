@@ -101,7 +101,8 @@
   --bg-color: var(--color-gray-2);
   --bg-2-color: var(--color-gray-1);
 
-  --buttom-secondary-color: var(--color-primary);
+  --buttom-secondary-bg-color: var(--color-primary-10);
+  --buttom-secondary-bg-color-hover: var(--color-primary-25);
 
   --input-color: var(--color-gray-8);
   --input-color-label: var(--color-gray-4);
@@ -135,7 +136,8 @@
   --bg-color: var(--color-gray-7);
   --bg-2-color: var(--color-gray-6);
 
-  --buttom-secondary-color: var(--color-primary);
+  --buttom-secondary-bg-color: var(--color-gray-1);
+  --buttom-secondary-bg-color-hover: var(--color-gray-3);
 
   --input-color: var(--color-gray-1);
   --input-color-label: var(--color-gray-1);

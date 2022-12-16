@@ -15,7 +15,9 @@
 
           <div class="column">
             <div class="row">Column 2 Row 1</div>
-            <div class="row">Column 2 Row 2</div>
+            <div class="row">
+              <button @click="onShowTaskClick">SHOW TASK</button>
+            </div>
             <div class="row">Column 2 Row 3</div>
             <div class="row">Column 2 Row 1</div>
           </div>
@@ -43,6 +45,9 @@
 
     <my-dashboard-edit-modal />
     <my-dashboard-delete-modal />
+    <my-task-show-modal />
+    <my-task-edit-modal />
+    <my-task-delete-modal />
   </div>
 </template>
 
@@ -53,6 +58,10 @@ import { MyHeader } from "@/layout/MyHeader";
 import { MySidebar } from "@/layout/MySidebar";
 import MyDashboardEditModal from "@/modals/MyDashboardEditModal.vue";
 import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
+import MyTaskShowModal from "@/modals/MyTaskShowModal.vue";
+import MyTaskEditModal from "@/modals/MyTaskEditModal.vue";
+import MyTaskDeleteModal from "@/modals/MyTaskDeleteModal.vue";
+import { MODAL_TASK_SHOW } from "@/store/constants";
 
 export default defineComponent({
   name: "HomePage",
@@ -61,6 +70,9 @@ export default defineComponent({
     MySidebar,
     MyDashboardEditModal,
     MyDashboardDeleteModal,
+    MyTaskShowModal,
+    MyTaskEditModal,
+    MyTaskDeleteModal,
   },
   computed: {
     ...mapGetters({
@@ -70,7 +82,13 @@ export default defineComponent({
   methods: {
     ...mapActions({
       toggleSidebar: "sidebar/toggleSidebar",
+      showModal: "modals/show",
     }),
+    onShowTaskClick() {
+      this.showModal({
+        name: MODAL_TASK_SHOW,
+      });
+    },
   },
 });
 </script>

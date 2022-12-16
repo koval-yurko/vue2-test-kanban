@@ -29,10 +29,13 @@ type MyMenuProps = {
 
   show: boolean;
   style: {
-    top: string | unknown;
-    left: string | unknown;
-    right: string | unknown;
+    top: string | undefined;
+    left: string | undefined;
+    right: string | undefined;
   };
+
+  onClose(): () => void;
+  onClick(): () => void;
 };
 
 export default defineComponent<MyMenuProps, MyMenuProps>({

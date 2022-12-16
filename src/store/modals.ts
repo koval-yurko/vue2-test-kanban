@@ -17,7 +17,7 @@ export default {
   mutations: {
     [MUTATION_SHOW_MODAL](
       state: ModalsState,
-      payload: { name: ModalsOpened; data: any }
+      payload: { name: ModalsOpened; data?: any }
     ) {
       state.opened = payload.name;
       state.data = payload.data;
@@ -28,7 +28,7 @@ export default {
     },
   },
   actions: {
-    show(context: ThemeContext, payload: { name: ModalsOpened; data: any }) {
+    show(context: ThemeContext, payload: { name: ModalsOpened; data?: any }) {
       context.commit(MUTATION_SHOW_MODAL, payload);
     },
     hide(context: ThemeContext) {

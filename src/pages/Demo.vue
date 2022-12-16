@@ -110,6 +110,47 @@
             </my-button>
           </div>
         </my-modal-box>
+
+        <br />
+
+        <my-modal-box>
+          <my-modal-header
+            title="Research pricing points of various competitors and trial different business models"
+          />
+
+          <div class="my-modal-text">
+            <p>
+              We know what we're planning to build for version one. Now we need
+              to finalise the first pricing model we'll use. Keep iterating the
+              subtasks until we have a coherent proposition.
+            </p>
+          </div>
+
+          <div class="my-modal-field">
+            <MyCheckboxGroup
+              name="checkgroup2"
+              v-model="checkboxValue"
+              label="Subtasks (2 of 3)"
+              full-width
+            >
+              <MyCheckbox
+                v-for="option of checkboxOptions"
+                :key="option.id"
+                :value="option.id"
+                >{{ option.label }}</MyCheckbox
+              >
+            </MyCheckboxGroup>
+          </div>
+
+          <div class="my-modal-field">
+            <MySelect
+              :options="selectOptions"
+              v-model="selectValue"
+              label="Some label"
+              full-width
+            />
+          </div>
+        </my-modal-box>
       </div>
 
       <br />
@@ -162,6 +203,16 @@
 
       <br />
       <br />
+      <MyInputsList
+        class="list-example"
+        label="Some label"
+        v-model="inputList"
+        add-text="+ Add New Subtask"
+      />
+      {{ inputList }}
+
+      <br />
+      <br />
       <MySelect
         :options="selectOptions"
         v-model="selectValue"
@@ -171,7 +222,7 @@
 
       <br />
       <br />
-      <MyCheckboxGroup name="checkgroup" v-model="checkboxValue">
+      <MyCheckboxGroup name="checkgroup3" v-model="checkboxValue">
         <MyCheckbox
           v-for="option of checkboxOptions"
           :key="option.id"
@@ -180,6 +231,107 @@
         >
       </MyCheckboxGroup>
       {{ checkboxValue }}
+
+      <br />
+      <br />
+      <div class="modal-bg">
+        <my-modal-box>
+          <my-modal-header title="Add New Board" />
+
+          <div class="my-modal-field">
+            <my-input
+              name="name"
+              label="Name"
+              placeholder="e.g. Web Design"
+              full-width
+            />
+          </div>
+
+          <div class="my-modal-field">
+            <my-inputs-list
+              name="columns"
+              label="Columns"
+              add-text="+ Add New Subtask"
+            />
+          </div>
+
+          <my-button type="submit" full-width>Create New Board</my-button>
+        </my-modal-box>
+
+        <br />
+
+        <my-modal-box>
+          <my-modal-header title="Delete this board?" color="destructive" />
+
+          <div class="my-modal-text">
+            <p>
+              Are you sure you want to delete the ‘Platform Launch’ board? This
+              action will remove all columns and tasks and cannot be reversed.
+            </p>
+          </div>
+
+          <div class="my-modal-controls">
+            <my-button color="destructive" type="button" full-width>
+              Delete
+            </my-button>
+            <my-button color="secondary" type="button" full-width>
+              Cancel
+            </my-button>
+          </div>
+        </my-modal-box>
+
+        <br />
+
+        <my-modal-box>
+          <my-modal-header
+            title="Research pricing points of various competitors and trial different business models"
+          >
+            <my-menu ref="menu">
+              <template v-slot:activator="{ onClick }">
+                <my-menu-button @click.prevent="onClick" />
+              </template>
+
+              <my-menu-list>
+                <my-menu-item>Edit Board</my-menu-item>
+                <my-menu-item color="destructive"> Delete Board </my-menu-item>
+              </my-menu-list>
+            </my-menu>
+          </my-modal-header>
+
+          <div class="my-modal-text">
+            <p>
+              We know what we're planning to build for version one. Now we need
+              to finalise the first pricing model we'll use. Keep iterating the
+              subtasks until we have a coherent proposition.
+            </p>
+          </div>
+
+          <div class="my-modal-field">
+            <MyCheckboxGroup
+              name="checkgroup4"
+              v-model="checkboxValue"
+              label="Subtasks (2 of 3)"
+              full-width
+            >
+              <MyCheckbox
+                v-for="option of checkboxOptions"
+                :key="option.id"
+                :value="option.id"
+                >{{ option.label }}</MyCheckbox
+              >
+            </MyCheckboxGroup>
+          </div>
+
+          <div class="my-modal-field">
+            <MySelect
+              :options="selectOptions"
+              v-model="selectValue"
+              label="Some label"
+              full-width
+            />
+          </div>
+        </my-modal-box>
+      </div>
     </div>
   </div>
 </template>
@@ -194,6 +346,7 @@ import { MyCheckboxGroup, MyCheckbox } from "@/components/form/MyCheckboxGroup";
 import { MyInputsList } from "@/components/form/MyInputsList";
 import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
 import { MyMenu, MyMenuList, MyMenuItem } from "@/components/MyMenu";
+import { MyMenuButton } from "@/components/MyMenuButton";
 
 export default defineComponent({
   name: "DemoPage",
@@ -210,6 +363,7 @@ export default defineComponent({
     MyMenu,
     MyMenuList,
     MyMenuItem,
+    MyMenuButton,
   },
   data() {
     return {
@@ -276,5 +430,9 @@ export default defineComponent({
 .section[data-theme="black"] {
   color: var(--text-color);
   background: var(--bg-2-color);
+}
+
+.section[data-theme="black"] .modal-bg {
+  background: var(--color-gray-8);
 }
 </style>

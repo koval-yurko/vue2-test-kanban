@@ -1,5 +1,8 @@
 <template>
-  <div class="my-select" :class="{ 'has-error': error }">
+  <div
+    class="my-select"
+    :class="{ 'my-select__error': error, 'my-select__full-width': fullWidth }"
+  >
     <div class="my-select_label-wrapper">
       <label :for="forId" v-if="label" class="my-select_label">{{
         label
@@ -38,6 +41,7 @@ type MySelectProps = {
   id?: boolean;
   label?: string;
   error?: string;
+  fullWidth?: boolean;
   value: string;
   options: MySelectOption[];
 
@@ -59,6 +63,10 @@ export default defineComponent<MySelectProps, MySelectProps>({
     },
     error: {
       type: String as PropType<string>,
+      required: false,
+    },
+    fullWidth: {
+      type: Boolean as PropType<boolean>,
       required: false,
     },
     options: {
@@ -99,6 +107,9 @@ export default defineComponent<MySelectProps, MySelectProps>({
   flex-direction: column;
   max-width: 100%;
 }
+.my-select__full-width {
+  display: flex;
+}
 
 .my-select_label-wrapper {
   padding-bottom: 4px;
@@ -133,6 +144,10 @@ export default defineComponent<MySelectProps, MySelectProps>({
   display: none;
 }
 
+.my-select__full-width .my-select_input {
+  width: 100%;
+}
+
 .my-select_input-icon {
   position: absolute;
   top: 17px;
@@ -148,5 +163,9 @@ export default defineComponent<MySelectProps, MySelectProps>({
 .my-select_input:focus-visible {
   outline: none;
   border-color: var(--input-color-border-focus);
+}
+
+.my-input__error .my-select_input {
+  border-color: var(--input-color-border-error);
 }
 </style>

@@ -5,28 +5,19 @@
       <div class="my-sidebar_menu-scroll">
         <ul class="my-sidebar_menu">
           <li class="my-sidebar_menu-item my-sidebar_menu-item__active">
-            <button
-              class="my-sidebar_menu-button"
-              @click.prevent="onDeleteBoardClick"
-            >
+            <button class="my-sidebar_menu-button">
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Text</span>
             </button>
           </li>
           <li class="my-sidebar_menu-item">
-            <button
-              class="my-sidebar_menu-button"
-              @click.prevent="onEditBoardClick"
-            >
+            <button class="my-sidebar_menu-button">
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Text</span>
             </button>
           </li>
           <li class="my-sidebar_menu-item">
-            <button
-              class="my-sidebar_menu-button"
-              @click.prevent="onEditBoardClick"
-            >
+            <button class="my-sidebar_menu-button">
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Text</span>
             </button>
@@ -34,7 +25,7 @@
           <li class="my-sidebar_menu-item my-sidebar_menu-item__new">
             <button
               class="my-sidebar_menu-button"
-              @click.prevent="onAddNewClick"
+              @click.prevent="onAddNewDashboardClick"
             >
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">
@@ -88,7 +79,7 @@ import MyEyeCloseIcon from "@/components/icons/MyEyeCloseIcon.vue";
 import MyEyeOpenIcon from "@/components/icons/MyEyeOpenIcon.vue";
 import MySunIcon from "@/components/icons/MySunIcon.vue";
 import MyMoonIcon from "@/components/icons/MyMoonIcon.vue";
-import { MODAL_DASHBOARD, MODAL_DASHBOARD_DELETE } from "@/store/constants";
+import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
 import type { PropType } from "vue";
 
 type Size = "small" | "large";
@@ -99,9 +90,7 @@ type MySidebarProps = {
   size?: Size;
   color?: Color;
 
-  onAddNewClick: () => void;
-  onEditBoardClick: () => void;
-  onDeleteBoardClick: () => void;
+  onAddNewDashboardClick: () => void;
   sidebarVisible: boolean;
   theme: string;
   toggleSidebar(): void;
@@ -143,20 +132,9 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
       toggleTheme: "theme/toggleTheme",
       showModal: "modals/show",
     }),
-    onAddNewClick() {
+    onAddNewDashboardClick() {
       this.showModal({
-        name: MODAL_DASHBOARD,
-      });
-    },
-    onEditBoardClick() {
-      this.showModal({
-        name: MODAL_DASHBOARD,
-        data: { name: "Yura", columns: ["aaa"] },
-      });
-    },
-    onDeleteBoardClick() {
-      this.showModal({
-        name: MODAL_DASHBOARD_DELETE,
+        name: MODAL_DASHBOARD_EDIT,
       });
     },
   },

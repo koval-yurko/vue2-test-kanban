@@ -1,25 +1,34 @@
 <template>
   <my-modal :show="isShowed" @close="onClose">
     <my-modal-box>
-      <my-modal-header :title="isEdit ? 'Edit Board' : 'Add New Board'" />
+      <my-modal-header :title="isEdit ? 'Edit Task' : 'Add New Task'" />
 
       <form @submit.prevent="onSubmit">
         <div class="my-modal-field">
           <my-input
-            v-model="name"
-            name="name"
-            :label="isEdit ? 'Board Name' : 'Name'"
-            placeholder="e.g. Web Design"
+            v-model="title"
+            name="title"
+            label="Title"
+            placeholder="e.g. Take coffee break"
             full-width
           />
         </div>
 
         <div class="my-modal-field">
           <my-inputs-list
-            v-model="columns"
-            name="columns"
-            :label="isEdit ? 'Board Columns' : 'Columns'"
+            v-model="subtasks"
+            name="subtasks"
+            label="Subtasks"
             add-text="+ Add New Subtask"
+          />
+        </div>
+
+        <div class="my-modal-field">
+          <MySelect
+            :options="selectOptions"
+            v-model="selectValue"
+            label="Status"
+            full-width
           />
         </div>
 
@@ -35,15 +44,23 @@
 import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
+import { MyButton } from "@/components/form/MyButton";
+import { MySelect } from "@/components/form/MySelect";
 import { MyInput } from "@/components/form/MyInput";
 import { MyInputsList } from "@/components/form/MyInputsList";
-import { MyButton } from "@/components/form/MyButton";
-import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
+import { MODAL_TASK_EDIT } from "@/store/constants";
 import type { PropType } from "vue";
 
-type MyDashboardEditModalProps = {
-  name: string;
-  columns: string[];
+type Option = {
+  id: string;
+  label: string;
+};
+
+type MyTaskEditModalProps = {
+  title: string;
+  subtasks: string[];
+  selectValue: string;
+  selectOptions: Option[];
   isEdit?: boolean;
 
   modalData: any;
@@ -54,24 +71,28 @@ type MyDashboardEditModalProps = {
   onSubmit: () => void;
 };
 
-export default defineComponent<
-  MyDashboardEditModalProps,
-  MyDashboardEditModalProps
->({
-  name: "MyDashboardEditModal",
+export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
+  name: "MyTaskEditModal",
   components: {
     MyModal,
     MyModalBox,
     MyModalHeader,
+    MyButton,
+    MySelect,
     MyInput,
     MyInputsList,
-    MyButton,
   },
   props: {},
   data() {
     return {
-      name: "",
-      columns: [],
+      title: "",
+      subtasks: [],
+      selectValue: "option 2",
+      selectOptions: [
+        { id: "option 1", label: "Option 1" },
+        { id: "option 2", label: "Option 2 Option 2 Option 2" },
+        { id: "option 3", label: "Option 3" },
+      ],
       isEdit: false,
     };
   },
@@ -80,7 +101,7 @@ export default defineComponent<
       modalData: "modals/data",
     }),
     isShowed() {
-      return this.$store.state.modals.opened === MODAL_DASHBOARD_EDIT;
+      return this.$store.state.modals.opened === MODAL_TASK_EDIT;
     },
   },
   methods: {
@@ -89,8 +110,8 @@ export default defineComponent<
     }),
     onClose() {
       this.modalHide();
-      this.name = "";
-      this.columns = [];
+      // this.name = "";
+      // this.columns = [];
       this.isEdit = false;
     },
     onSubmit() {
@@ -101,11 +122,11 @@ export default defineComponent<
     modalData() {
       if (this.modalData) {
         this.isEdit = true;
-        this.name = this.modalData.name;
-        this.columns = this.modalData.columns;
+        // this.name = this.modalData.name;
+        // this.columns = this.modalData.columns;
       } else {
-        this.name = "";
-        this.columns = [];
+        // this.name = "";
+        // this.columns = [];
       }
     },
   },

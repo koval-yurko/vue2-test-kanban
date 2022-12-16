@@ -13,7 +13,8 @@
           <my-button
             class="my-header_btn-add my-header_btn-add__desktop"
             size="large"
-            disabled
+            :disabled="false"
+            @click="onAddTaskClick"
             >+ Add New Task</my-button
           >
           <my-button
@@ -22,16 +23,21 @@
           >
             <my-plus-icon />
           </my-button>
-          <my-menu>
+          <my-menu class="my-header-menu-btn" ref="menu">
             <template v-slot:activator="{ onClick }">
-              <button class="menu-button" @click.prevent="onClick">
-                <my-menu-icon />
-              </button>
+              <my-menu-button
+                class="my-header-menu-btn"
+                @click.prevent="onClick"
+              />
             </template>
 
             <my-menu-list>
-              <my-menu-item>Edit Task</my-menu-item>
-              <my-menu-item color="destructive">Delete Task</my-menu-item>
+              <my-menu-item @click="onEditDashboardClick"
+                >Edit Board</my-menu-item
+              >
+              <my-menu-item @click="onDeleteDashboardClick" color="destructive">
+                Delete Board
+              </my-menu-item>
             </my-menu-list>
           </my-menu>
         </div>
@@ -43,14 +49,18 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { MyButton } from "@/components/form/MyButton";
+import { MyMenuButton } from "@/components/MyMenuButton";
 import { MyMenu, MyMenuList, MyMenuItem } from "@/components/MyMenu";
 import MyLogoIcon from "@/components/icons/MyLogoIcon.vue";
-import MyMenuIcon from "@/components/icons/MyMenuIcon.vue";
 import MyPlusIcon from "@/components/icons/MyPlusIcon.vue";
-
-import type { PropType } from "vue";
+import {
+  MODAL_DASHBOARD_EDIT,
+  MODAL_DASHBOARD_DELETE,
+  MODAL_TASK_EDIT,
+} from "@/store/constants";
+import type { PropType, ComponentPublicInstance } from "vue";
 
 type Size = "small" | "large";
 
@@ -61,15 +71,21 @@ type MyHeaderProps = {
   color?: Color;
 
   sidebarVisible: boolean;
+
+  showModal(opts: { name: string; data?: any }): void;
+
+  onAddTaskClick: () => void;
+  onEditDashboardClick: () => void;
+  onDeleteDashboardClick: () => void;
 };
 
 export default defineComponent<MyHeaderProps, MyHeaderProps>({
   name: "MyHeader",
   components: {
     MyLogoIcon,
-    MyMenuIcon,
     MyPlusIcon,
     MyButton,
+    MyMenuButton,
     MyMenu,
     MyMenuList,
     MyMenuItem,
@@ -90,6 +106,35 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
     ...mapGetters({
       sidebarVisible: "sidebar/isVisible",
     }),
+  },
+  methods: {
+    ...mapActions({
+      showModal: "modals/show",
+    }),
+    onAddTaskClick() {
+      this.showModal({
+        name: MODAL_TASK_EDIT,
+      });
+    },
+    onEditDashboardClick() {
+      this.showModal({
+        name: MODAL_DASHBOARD_EDIT,
+        data: { name: "Yura", columns: ["aaa"] },
+      });
+      if (this.$refs.menu) {
+        const menu = this.$refs.menu as ComponentPublicInstance<typeof MyMenu>;
+        menu.onClose();
+      }
+    },
+    onDeleteDashboardClick() {
+      this.showModal({
+        name: MODAL_DASHBOARD_DELETE,
+      });
+      if (this.$refs.menu) {
+        const menu = this.$refs.menu as ComponentPublicInstance<typeof MyMenu>;
+        menu.onClose();
+      }
+    },
   },
 });
 </script>
@@ -158,16 +203,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   padding: 8px 19px;
 }
 
-.menu-button {
-  margin-left: 10px;
-  padding: 13px 15px 10px;
-  background: none;
-  border: none;
-  border-radius: 10px;
-  color: var(--color-gray-4);
-  cursor: pointer;
-
-  transition: color 0.3s ease;
+.my-header-menu-btn {
 }
 .menu-button:hover {
   color: var(--color-primary);
@@ -196,7 +232,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
     display: inline;
   }
 
-  .menu-button {
+  .my-header-menu-btn {
     margin-left: 6px;
     margin-right: 5px;
     padding: 5px 10px 4px;

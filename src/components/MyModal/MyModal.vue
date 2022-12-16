@@ -18,6 +18,7 @@ import type { PropType } from "vue";
 
 type MyModalProps = {
   show: boolean;
+  onClose: () => void;
 };
 
 export default defineComponent<MyModalProps, MyModalProps>({
