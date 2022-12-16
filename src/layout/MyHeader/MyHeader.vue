@@ -22,7 +22,18 @@
           >
             <my-plus-icon />
           </my-button>
-          <button class="menu-button"><my-menu-icon /></button>
+          <my-menu>
+            <template v-slot:activator="{ onClick }">
+              <button class="menu-button" @click.prevent="onClick">
+                <my-menu-icon />
+              </button>
+            </template>
+
+            <my-menu-list>
+              <my-menu-item>Edit Task</my-menu-item>
+              <my-menu-item color="destructive">Delete Task</my-menu-item>
+            </my-menu-list>
+          </my-menu>
         </div>
       </div>
     </div>
@@ -34,6 +45,7 @@
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
 import { MyButton } from "@/components/form/MyButton";
+import { MyMenu, MyMenuList, MyMenuItem } from "@/components/MyMenu";
 import MyLogoIcon from "@/components/icons/MyLogoIcon.vue";
 import MyMenuIcon from "@/components/icons/MyMenuIcon.vue";
 import MyPlusIcon from "@/components/icons/MyPlusIcon.vue";
@@ -53,7 +65,15 @@ type MyHeaderProps = {
 
 export default defineComponent<MyHeaderProps, MyHeaderProps>({
   name: "MyHeader",
-  components: { MyLogoIcon, MyMenuIcon, MyPlusIcon, MyButton },
+  components: {
+    MyLogoIcon,
+    MyMenuIcon,
+    MyPlusIcon,
+    MyButton,
+    MyMenu,
+    MyMenuList,
+    MyMenuItem,
+  },
   props: {
     size: {
       type: String as PropType<Size>,

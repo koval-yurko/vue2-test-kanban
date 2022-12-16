@@ -48,6 +48,9 @@
   --checkbox-mark-bg-color-checked: var(--color-primary);
   --checkbox-mark-border-color-checked: var(--color-primary);
 
+  --btn-close-color: var(--color-gray-4);
+  --btn-close-color-hover: var(--color-destructive);
+
   --font-family: 'Plus Jakarta Sans', Arial, sans-serif;
   --font-size: 13px;
   --line-height: 23px;
@@ -81,8 +84,10 @@
   --modal-box-title-color-delete: var(--color-destructive);
   --modal-box-text-color: var(--color-gray-4);
 
-  --btn-close-color: var(--color-gray-4);
-  --btn-close-color-hover: var(--color-destructive);
+  --menu-bg-color: var(--color-gray-1);
+  --menu-bg-color-hover: var(--color-primary-10);
+  --menu-color: var(--color-gray-4);
+  --menu-color-destructive: var(--color-destructive);
 
   --z-index-sidebar: 40;
   --z-index-sidebar-show: 50;
@@ -116,6 +121,12 @@
   --sidebar-menu-bg-color-hover: var(--color-primary-10);
 
   --theme-toggle-bg-color: var(--color-gray-2);
+
+  --modal-box-bg-color: var(--color-gray-1);
+  --modal-box-title-color: var(--color-gray-8);
+
+  --menu-bg-color: var(--color-gray-1);
+  --menu-bg-color-hover: var(--color-primary-10);
 }
 
 :root[data-theme="black"],
@@ -144,6 +155,12 @@
   --sidebar-menu-bg-color-hover: var(--color-gray-1);
 
   --theme-toggle-bg-color: var(--color-gray-7);
+
+  --modal-box-bg-color: var(--color-gray-6);
+  --modal-box-title-color: var(--color-gray-1);
+
+  --menu-bg-color: var(--color-gray-7);
+  --menu-bg-color-hover: var(--color-gray-1);
 }
 
 @font-face {

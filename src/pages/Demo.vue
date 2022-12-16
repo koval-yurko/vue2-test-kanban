@@ -28,7 +28,7 @@
       <br />
       <br />
       <MyInputsList
-        class="list-list"
+        class="list-example"
         label="Some label"
         v-model="inputList"
         add-text="+ Add New Subtask"
@@ -111,6 +111,32 @@
           </div>
         </my-modal-box>
       </div>
+
+      <br />
+      <br />
+      <div class="menu-example">
+        <MyMenu>
+          <template v-slot:activator="{ onClick }">
+            <button @click.prevent="onClick">Menu</button>
+          </template>
+
+          <MyMenuList>
+            <MyMenuItem>Edit Task</MyMenuItem>
+            <MyMenuItem color="destructive">Delete Task</MyMenuItem>
+          </MyMenuList>
+        </MyMenu>
+
+        <MyMenu>
+          <template v-slot:activator="{ onClick }">
+            <button @click.prevent="onClick">Menu</button>
+          </template>
+
+          <MyMenuList>
+            <MyMenuItem>Edit Task</MyMenuItem>
+            <MyMenuItem color="destructive">Delete Task</MyMenuItem>
+          </MyMenuList>
+        </MyMenu>
+      </div>
     </div>
 
     <div class="section" data-theme="black">
@@ -167,6 +193,7 @@ import { MySelect } from "@/components/form/MySelect";
 import { MyCheckboxGroup, MyCheckbox } from "@/components/form/MyCheckboxGroup";
 import { MyInputsList } from "@/components/form/MyInputsList";
 import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
+import { MyMenu, MyMenuList, MyMenuItem } from "@/components/MyMenu";
 
 export default defineComponent({
   name: "DemoPage",
@@ -180,6 +207,9 @@ export default defineComponent({
     MyModal,
     MyModalBox,
     MyModalHeader,
+    MyMenu,
+    MyMenuList,
+    MyMenuItem,
   },
   data() {
     return {
@@ -225,9 +255,13 @@ export default defineComponent({
 .modal-bg {
   padding: 30px;
 }
-.list-list {
+.list-example {
   width: 100%;
   max-width: 500px;
+}
+.menu-example {
+  display: flex;
+  justify-content: space-between;
 }
 
 .section[data-theme="white"] {
