@@ -66,9 +66,50 @@
       <br />
       <br />
       <div class="modal-bg">
-        <MyDashboardEditModal />
+        <my-modal-box>
+          <my-modal-header title="Add New Board" />
+
+          <div class="my-modal-field">
+            <my-input
+              name="name"
+              label="Name"
+              placeholder="e.g. Web Design"
+              full-width
+            />
+          </div>
+
+          <div class="my-modal-field">
+            <my-inputs-list
+              name="columns"
+              label="Columns"
+              add-text="+ Add New Subtask"
+            />
+          </div>
+
+          <my-button type="submit" full-width>Create New Board</my-button>
+        </my-modal-box>
+
         <br />
-        <MyDashboardDeleteModal />
+
+        <my-modal-box>
+          <my-modal-header title="Delete this board?" color="destructive" />
+
+          <div class="my-modal-text">
+            <p>
+              Are you sure you want to delete the ‘Platform Launch’ board? This
+              action will remove all columns and tasks and cannot be reversed.
+            </p>
+          </div>
+
+          <div class="my-modal-controls">
+            <my-button color="destructive" type="button" full-width>
+              Delete
+            </my-button>
+            <my-button color="secondary" type="submit" full-width>
+              Cancel
+            </my-button>
+          </div>
+        </my-modal-box>
       </div>
     </div>
 
@@ -125,9 +166,7 @@ import { MyInput } from "@/components/form/MyInput";
 import { MySelect } from "@/components/form/MySelect";
 import { MyCheckboxGroup, MyCheckbox } from "@/components/form/MyCheckboxGroup";
 import { MyInputsList } from "@/components/form/MyInputsList";
-import { MyModal, MyModalBox } from "@/components/MyModal";
-import MyDashboardEditModal from "@/modals/MyDashboardEditModal.vue";
-import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
+import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
 
 export default defineComponent({
   name: "DemoPage",
@@ -140,8 +179,7 @@ export default defineComponent({
     MyInputsList,
     MyModal,
     MyModalBox,
-    MyDashboardEditModal,
-    MyDashboardDeleteModal,
+    MyModalHeader,
   },
   data() {
     return {

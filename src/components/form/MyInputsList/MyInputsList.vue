@@ -83,7 +83,7 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
     },
   },
   data() {
-    const data = this.$attrs.value as unknown as string[];
+    const data = (this.$attrs.value || []) as unknown as string[];
     const count = data.length;
     const values = count ? data.map((value) => value) : [""];
 
@@ -123,16 +123,12 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
     },
   },
   watch: {
-    values() {
-      // const value = this.values.map((el) => el);
-      // this.$emit("input", value);
-    },
     "$attrs.value"() {
-      const data = this.$attrs.value as unknown as string[];
+      const data = (this.$attrs.value || []) as unknown as string[];
       const count = data.length;
       const values = count ? data.map((value) => value) : [""];
 
-      this.count = count;
+      this.count = count || 1;
       this.values = values;
     },
   },
@@ -141,7 +137,7 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
 
 <style>
 .my-input-list {
-  margin-bottom: 24px;
+  padding-bottom: 3px;
 }
 
 .my-input-list_list {

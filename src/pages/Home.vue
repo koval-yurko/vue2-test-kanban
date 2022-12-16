@@ -40,6 +40,9 @@
         </div>
       </div>
     </div>
+
+    <my-dashboard-edit-modal />
+    <my-dashboard-delete-modal />
   </div>
 </template>
 
@@ -48,10 +51,17 @@ import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { MyHeader } from "@/layout/MyHeader";
 import { MySidebar } from "@/layout/MySidebar";
+import MyDashboardEditModal from "@/modals/MyDashboardEditModal.vue";
+import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
 
 export default defineComponent({
   name: "HomePage",
-  components: { MyHeader, MySidebar },
+  components: {
+    MyHeader,
+    MySidebar,
+    MyDashboardEditModal,
+    MyDashboardDeleteModal,
+  },
   computed: {
     ...mapGetters({
       sidebarVisible: "sidebar/isVisible",

@@ -1,5 +1,5 @@
 import type { ActionContext } from "vuex";
-import { THEME_WHITE, THEME_BLACK } from "./types";
+import { THEME_WHITE, THEME_BLACK } from "./constants";
 import type { ThemeState, RootState } from "./types";
 
 const MUTATION_TOGGLE_THEME = "MUTATION_TOGGLE_THEME";

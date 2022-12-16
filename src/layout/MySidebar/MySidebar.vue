@@ -5,27 +5,41 @@
       <div class="my-sidebar_menu-scroll">
         <ul class="my-sidebar_menu">
           <li class="my-sidebar_menu-item my-sidebar_menu-item__active">
-            <button class="my-sidebar_menu-button">
+            <button
+              class="my-sidebar_menu-button"
+              @click.prevent="onDeleteBoardClick"
+            >
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Text</span>
             </button>
           </li>
           <li class="my-sidebar_menu-item">
-            <button class="my-sidebar_menu-button">
+            <button
+              class="my-sidebar_menu-button"
+              @click.prevent="onEditBoardClick"
+            >
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Text</span>
             </button>
           </li>
           <li class="my-sidebar_menu-item">
-            <button class="my-sidebar_menu-button">
+            <button
+              class="my-sidebar_menu-button"
+              @click.prevent="onEditBoardClick"
+            >
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Text</span>
             </button>
           </li>
-          <li class="my-sidebar_menu-item">
-            <button class="my-sidebar_menu-button">
+          <li class="my-sidebar_menu-item my-sidebar_menu-item__new">
+            <button
+              class="my-sidebar_menu-button"
+              @click.prevent="onAddNewClick"
+            >
               <my-board-icon class="my-sidebar_menu-item-icon" />
-              <span class="my-sidebar_menu-item-text h3">Text</span>
+              <span class="my-sidebar_menu-item-text h3">
+                + Create New Board
+              </span>
             </button>
           </li>
         </ul>
@@ -74,6 +88,7 @@ import MyEyeCloseIcon from "@/components/icons/MyEyeCloseIcon.vue";
 import MyEyeOpenIcon from "@/components/icons/MyEyeOpenIcon.vue";
 import MySunIcon from "@/components/icons/MySunIcon.vue";
 import MyMoonIcon from "@/components/icons/MyMoonIcon.vue";
+import { MODAL_DASHBOARD, MODAL_DASHBOARD_DELETE } from "@/store/constants";
 import type { PropType } from "vue";
 
 type Size = "small" | "large";
@@ -84,10 +99,14 @@ type MySidebarProps = {
   size?: Size;
   color?: Color;
 
+  onAddNewClick: () => void;
+  onEditBoardClick: () => void;
+  onDeleteBoardClick: () => void;
   sidebarVisible: boolean;
   theme: string;
   toggleSidebar(): void;
   toggleTheme(): void;
+  showModal(opts: { name: string; data?: any }): void;
 };
 
 export default defineComponent<MySidebarProps, MySidebarProps>({
@@ -122,7 +141,24 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
     ...mapActions({
       toggleSidebar: "sidebar/toggleSidebar",
       toggleTheme: "theme/toggleTheme",
+      showModal: "modals/show",
     }),
+    onAddNewClick() {
+      this.showModal({
+        name: MODAL_DASHBOARD,
+      });
+    },
+    onEditBoardClick() {
+      this.showModal({
+        name: MODAL_DASHBOARD,
+        data: { name: "Yura", columns: ["aaa"] },
+      });
+    },
+    onDeleteBoardClick() {
+      this.showModal({
+        name: MODAL_DASHBOARD_DELETE,
+      });
+    },
   },
 });
 </script>

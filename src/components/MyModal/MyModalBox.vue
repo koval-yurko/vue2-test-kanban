@@ -40,4 +40,31 @@ export default defineComponent<MyModalBoxProps, MyModalBoxProps>({
   box-sizing: border-box;
   color: var(--modal-box-text-color);
 }
+
+.my-modal-field {
+  margin-bottom: 21px;
+}
+
+.my-modal-text {
+  margin-bottom: 24px;
+}
+
+.my-modal-controls {
+  display: flex;
+}
+
+.my-modal-controls .my-button {
+  width: 50%;
+  flex-grow: 1;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.my-modal-controls .my-button:first-child {
+  margin-left: 0;
+}
+
+.my-modal-controls .my-button:last-child {
+  margin-right: 0;
+}
 </style>

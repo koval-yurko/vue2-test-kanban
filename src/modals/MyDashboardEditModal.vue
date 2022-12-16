@@ -1,41 +1,57 @@
 <template>
-  <my-modal-box>
-    <my-modal-header title="Add New Board" />
+  <my-modal :show="isShowed" @close="onClose">
+    <my-modal-box>
+      <my-modal-header :title="isEdit ? 'Edit Board' : 'Add New Board'" />
 
-    <form @submit.prevent="onSubmit">
-      <div class="my-field">
-        <my-input
-          name="name"
-          label="Board Name"
-          placeholder="e.g. Web Design"
-          full-width
-        />
-      </div>
+      <form @submit.prevent="onSubmit">
+        <div class="my-modal-field">
+          <my-input
+            v-model="name"
+            name="name"
+            :label="isEdit ? 'Board Name' : 'Name'"
+            placeholder="e.g. Web Design"
+            full-width
+          />
+        </div>
 
-      <div class="my-field">
-        <my-inputs-list
-          name="columns"
-          label="Some label"
-          v-model="inputList"
-          add-text="+ Add New Subtask"
-        />
-      </div>
+        <div class="my-modal-field">
+          <my-inputs-list
+            v-model="columns"
+            name="columns"
+            :label="isEdit ? 'Board Columns' : 'Columns'"
+            add-text="+ Add New Subtask"
+          />
+        </div>
 
-      <my-button type="submit" full-width>Create New Board</my-button>
-    </form>
-  </my-modal-box>
+        <my-button type="submit" full-width>{{
+          isEdit ? "Save Changes" : "Create New Board"
+        }}</my-button>
+      </form>
+    </my-modal-box>
+  </my-modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { MyModalBox, MyModalHeader } from "@/components/MyModal";
+import { mapGetters, mapActions } from "vuex";
+import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
 import { MyInput } from "@/components/form/MyInput";
 import { MyInputsList } from "@/components/form/MyInputsList";
 import { MyButton } from "@/components/form/MyButton";
+import { MODAL_DASHBOARD } from "@/store/constants";
 import type { PropType } from "vue";
 
 type MyDashboardEditModalProps = {
-  onSubmit?: () => void;
+  name: string;
+  columns: string[];
+  isEdit?: boolean;
+
+  modalData: any;
+  isShowed: boolean;
+
+  modalHide: () => void;
+  onClose: () => void;
+  onSubmit: () => void;
 };
 
 export default defineComponent<
@@ -44,33 +60,56 @@ export default defineComponent<
 >({
   name: "MyDashboardEditModal",
   components: {
+    MyModal,
     MyModalBox,
     MyModalHeader,
     MyInput,
     MyInputsList,
     MyButton,
   },
-  props: {
-    test: {
-      type: Function as PropType<() => void>,
-      required: false,
-    },
-  },
+  props: {},
   data() {
     return {
-      inputList: [],
+      name: "",
+      columns: [],
+      isEdit: false,
     };
   },
+  computed: {
+    ...mapGetters({
+      modalData: "modals/data",
+    }),
+    isShowed() {
+      return this.$store.state.modals.opened === MODAL_DASHBOARD;
+    },
+  },
   methods: {
+    ...mapActions({
+      modalHide: "modals/hide",
+    }),
+    onClose() {
+      this.modalHide();
+      this.name = "";
+      this.columns = [];
+      this.isEdit = false;
+    },
     onSubmit() {
       console.log("submit");
+    },
+  },
+  watch: {
+    modalData() {
+      if (this.modalData) {
+        this.isEdit = true;
+        this.name = this.modalData.name;
+        this.columns = this.modalData.columns;
+      } else {
+        this.name = "";
+        this.columns = [];
+      }
     },
   },
 });
 </script>
 
-<style>
-.my-field {
-  margin-bottom: 21px;
-}
-</style>
+<style></style>

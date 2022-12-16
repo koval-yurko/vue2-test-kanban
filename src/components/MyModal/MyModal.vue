@@ -74,20 +74,34 @@ export default defineComponent<MyModalProps, MyModalProps>({
 }
 
 .my-modal-enter-active {
-  transition: all 0.2s ease-out;
+  transition: opacity 0.1s ease-out;
   opacity: 0;
+}
+.my-modal-enter-active .my-modal_content {
+  transition: transform 0.1s ease-out;
+  transform: translateY(10px);
 }
 
 .my-modal-enter-to {
   opacity: 1;
 }
+.my-modal-enter-to .my-modal_content {
+  transform: translateY(0px);
+}
 
 .my-modal-leave-active {
-  transition: all 0.2s ease-out;
+  transition: opacity 0.1s ease-out;
   opacity: 1;
+}
+.my-modal-leave-active .my-modal_content {
+  transition: transform 0.1s ease-out;
+  transform: translateY(0px);
 }
 
 .my-modal-leave-to {
   opacity: 0;
+}
+.my-modal-leave-to .my-modal_content {
+  transform: translateY(-10px);
 }
 </style>
