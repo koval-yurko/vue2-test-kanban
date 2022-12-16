@@ -81,11 +81,13 @@ export default defineComponent({
   flex-direction: column;
   flex-grow: 1;
   width: 100%;
+  height: 100%;
 }
 .my-layout_content {
   flex-grow: 1;
   flex-direction: row;
   display: flex;
+  overflow: hidden;
 }
 
 .my-content {
