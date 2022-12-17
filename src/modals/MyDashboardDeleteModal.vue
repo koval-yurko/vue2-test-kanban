@@ -35,7 +35,6 @@ import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
 import { MyButton } from "@/components/form/MyButton";
 import { MODAL_DASHBOARD_DELETE } from "@/store/constants";
 import type { Dashboard } from "@/store/types";
-import type { PropType } from "vue";
 
 type MyDashboardEditModalProps = {
   modalData: Dashboard;
@@ -43,7 +42,7 @@ type MyDashboardEditModalProps = {
   dashboards: Dashboard[];
   activeDashboard: Dashboard | undefined;
 
-  modalHide: () => void;
+  hideModal: () => void;
   deleteDashboard: (id: string) => void;
   setActiveDashboard: (id: string) => void;
 
@@ -77,12 +76,12 @@ export default defineComponent<
   },
   methods: {
     ...mapActions({
-      modalHide: "modals/hide",
+      hideModal: "modals/hideModal",
       deleteDashboard: "dashboards/deleteDashboard",
       setActiveDashboard: "dashboards/setActiveDashboard",
     }),
     onClose() {
-      this.modalHide();
+      this.hideModal();
     },
     onSubmit() {
       if (this.activeDashboard) {

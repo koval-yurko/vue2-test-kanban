@@ -30,7 +30,7 @@ export default defineComponent<MyAddBoardProps, MyAddBoardProps>({
   components: { MyButton },
   methods: {
     ...mapActions({
-      showModal: "modals/show",
+      showModal: "modals/showModal",
     }),
     onAddNewDashboardClick() {
       this.showModal({

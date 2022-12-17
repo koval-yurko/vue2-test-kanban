@@ -28,10 +28,13 @@ export default {
     },
   },
   actions: {
-    show(context: ThemeContext, payload: { name: ModalsOpened; data?: any }) {
+    showModal(
+      context: ThemeContext,
+      payload: { name: ModalsOpened; data?: any }
+    ) {
       context.commit(MUTATION_SHOW_MODAL, payload);
     },
-    hide(context: ThemeContext) {
+    hideModal(context: ThemeContext) {
       context.commit(MUTATION_CLOSE_MODAL);
     },
   },

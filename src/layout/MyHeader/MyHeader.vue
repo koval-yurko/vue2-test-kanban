@@ -119,7 +119,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   },
   methods: {
     ...mapActions({
-      showModal: "modals/show",
+      showModal: "modals/showModal",
     }),
     onAddTaskClick() {
       this.showModal({

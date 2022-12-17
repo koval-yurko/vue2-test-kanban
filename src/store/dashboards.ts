@@ -300,5 +300,15 @@ export default {
         ? store.activeDashboard.columns[0]
         : undefined;
     },
+    statusOptions(store: DashboardsState) {
+      return store.activeDashboard
+        ? store.activeDashboard.columns.map((column) => {
+            return {
+              id: column.name,
+              label: column.name,
+            };
+          })
+        : [];
+    },
   },
 };

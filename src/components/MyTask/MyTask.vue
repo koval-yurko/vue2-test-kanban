@@ -41,7 +41,7 @@ export default defineComponent<MyTaskProps, MyTaskProps>({
   },
   methods: {
     ...mapActions({
-      showModal: "modals/show",
+      showModal: "modals/showModal",
     }),
     onShowClick() {
       this.showModal({

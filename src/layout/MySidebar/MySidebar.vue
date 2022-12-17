@@ -140,7 +140,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
     ...mapActions({
       toggleSidebar: "sidebar/toggleSidebar",
       toggleTheme: "theme/toggleTheme",
-      showModal: "modals/show",
+      showModal: "modals/showModal",
       setActiveDashboard: "dashboards/setActiveDashboard",
     }),
     onAddNewDashboardClick() {

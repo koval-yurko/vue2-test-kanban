@@ -38,7 +38,7 @@ export default defineComponent<MyEmptyBoardProps, MyEmptyBoardProps>({
   },
   methods: {
     ...mapActions({
-      showModal: "modals/show",
+      showModal: "modals/showModal",
     }),
     onAddNewColumnClick() {
       this.showModal({

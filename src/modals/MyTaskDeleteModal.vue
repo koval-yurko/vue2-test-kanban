@@ -43,7 +43,7 @@ type MyTaskDeleteModalProps = {
 
   isShowed: boolean;
 
-  modalHide: () => void;
+  hideModal: () => void;
   deleteTask: (props: { dashboardId: string; id: string }) => void;
   setActiveDashboard: (id: string) => void;
 
@@ -72,12 +72,12 @@ export default defineComponent<MyTaskDeleteModalProps, MyTaskDeleteModalProps>({
   },
   methods: {
     ...mapActions({
-      modalHide: "modals/hide",
+      hideModal: "modals/hideModal",
       deleteTask: "dashboards/deleteTask",
       setActiveDashboard: "dashboards/setActiveDashboard",
     }),
     onClose() {
-      this.modalHide();
+      this.hideModal();
     },
     onSubmit() {
       if (!this.activeDashboard || !this.modalData) {

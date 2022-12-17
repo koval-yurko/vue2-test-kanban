@@ -57,7 +57,7 @@ type MyDashboardEditModalProps = {
   setActiveDashboard: (id: string) => void;
   createDashboard: (dashboard: DashboardCreateDTO) => Dashboard;
   editDashboard: (payload: { id: string; data: DashboardEditDTO }) => Dashboard;
-  modalHide: () => void;
+  hideModal: () => void;
   onClose: () => void;
   onSubmit: () => void;
 };
@@ -93,13 +93,13 @@ export default defineComponent<
   },
   methods: {
     ...mapActions({
-      modalHide: "modals/hide",
+      hideModal: "modals/hideModal",
       createDashboard: "dashboards/createDashboard",
       setActiveDashboard: "dashboards/setActiveDashboard",
       editDashboard: "dashboards/editDashboard",
     }),
     onClose() {
-      this.modalHide();
+      this.hideModal();
       this.name = "";
       this.columns = [];
       this.isEdit = false;

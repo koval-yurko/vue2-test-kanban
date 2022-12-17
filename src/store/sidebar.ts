@@ -23,7 +23,7 @@ export default {
     },
   },
   getters: {
-    isVisible(store: SidebarState) {
+    isSidebarVisible(store: SidebarState) {
       return store.visible;
     },
   },

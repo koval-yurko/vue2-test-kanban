@@ -67,15 +67,15 @@ import type { ComponentPublicInstance, PropType } from "vue";
 
 type MyTaskShowModalProps = {
   selectedSubtasks: string[];
-
   status: string;
-  statusOptions: MySelectOption[];
 
   modalData: Task | undefined;
   activeDashboard: Dashboard | undefined;
+  statusOptions: MySelectOption[];
+  completedText: string;
   isShowed: boolean;
 
-  modalHide: () => void;
+  hideModal: () => void;
   showModal: (opts: { name: string; data?: Task }) => void;
   setActiveDashboard: (id: string) => void;
   editTask: (props: {
@@ -105,10 +105,6 @@ export default defineComponent<MyTaskShowModalProps, MyTaskShowModalProps>({
     MySelect,
   },
   props: {},
-  created() {
-    const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
-    this.status = this.status ? this.status : firstId;
-  },
   data() {
     return {
       selectedSubtasks: [],
@@ -119,17 +115,8 @@ export default defineComponent<MyTaskShowModalProps, MyTaskShowModalProps>({
     ...mapGetters({
       modalData: "modals/data",
       activeDashboard: "dashboards/activeDashboard",
+      statusOptions: "dashboards/statusOptions",
     }),
-    statusOptions() {
-      return this.activeDashboard
-        ? this.activeDashboard.columns.map((column) => {
-            return {
-              id: column.name,
-              label: column.name,
-            };
-          })
-        : [];
-    },
     completedText() {
       const total = this.modalData ? this.modalData.subtasks.length : 0;
       const completed = this.selectedSubtasks.length;
@@ -141,13 +128,15 @@ export default defineComponent<MyTaskShowModalProps, MyTaskShowModalProps>({
   },
   methods: {
     ...mapActions({
-      modalHide: "modals/hide",
-      showModal: "modals/show",
+      hideModal: "modals/hideModal",
+      showModal: "modals/showModal",
       setActiveDashboard: "dashboards/setActiveDashboard",
       editTask: "dashboards/editTask",
     }),
     onClose() {
-      this.modalHide();
+      this.hideModal();
+      this.status = "";
+      this.selectedSubtasks = [];
     },
     onEditTaskClick() {
       if (this.$refs.menu) {
@@ -201,10 +190,6 @@ export default defineComponent<MyTaskShowModalProps, MyTaskShowModalProps>({
           .map((subtasks) => (subtasks.isCompleted ? subtasks.id : ""))
           .filter((el) => el);
       }
-    },
-    activeDashboard() {
-      const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
-      this.status = this.status ? this.status : firstId;
     },
     status() {
       this.saveChanges();

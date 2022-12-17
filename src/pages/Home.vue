@@ -53,7 +53,6 @@ import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
 import MyTaskShowModal from "@/modals/MyTaskShowModal.vue";
 import MyTaskEditModal from "@/modals/MyTaskEditModal.vue";
 import MyTaskDeleteModal from "@/modals/MyTaskDeleteModal.vue";
-import { MODAL_TASK_SHOW } from "@/store/constants";
 
 export default defineComponent({
   name: "HomePage",
@@ -79,22 +78,13 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      sidebarVisible: "sidebar/isVisible",
       activeDashboard: "dashboards/activeDashboard",
     }),
   },
   methods: {
     ...mapActions({
-      toggleSidebar: "sidebar/toggleSidebar",
-      showModal: "modals/show",
-      addDashboard: "dashboards/addDashboard",
       loadDashboards: "dashboards/loadDashboards",
     }),
-    onShowTaskClick() {
-      this.showModal({
-        name: MODAL_TASK_SHOW,
-      });
-    },
   },
 });
 </script>

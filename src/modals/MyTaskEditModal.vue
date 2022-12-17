@@ -69,7 +69,6 @@ import type {
   TaskCreateDTO,
   TaskEditDTO,
 } from "@/store/types";
-import type { PropType } from "vue";
 
 type MyTaskEditModalProps = {
   title: string;
@@ -77,14 +76,14 @@ type MyTaskEditModalProps = {
   subtasks: MyInputsListValue[];
   status: string;
 
-  statusOptions: MySelectOption[];
   isEdit?: boolean;
 
   modalData: Task | undefined;
   activeDashboard: Dashboard | undefined;
+  statusOptions: MySelectOption[];
   isShowed: boolean;
 
-  modalHide: () => void;
+  hideModal: () => void;
   showModal: (opts: { name: string; data?: Task }) => void;
   setActiveDashboard: (id: string) => void;
   createTask: (data: { dashboardId: string; data: TaskCreateDTO }) => void;
@@ -110,7 +109,7 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
     MyInputsList,
   },
   props: {},
-  created() {
+  updated() {
     const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
     this.status = this.status ? this.status : firstId;
   },
@@ -127,31 +126,22 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
     ...mapGetters({
       modalData: "modals/data",
       activeDashboard: "dashboards/activeDashboard",
+      statusOptions: "dashboards/statusOptions",
     }),
-    statusOptions() {
-      return this.activeDashboard
-        ? this.activeDashboard.columns.map((column) => {
-            return {
-              id: column.name,
-              label: column.name,
-            };
-          })
-        : [];
-    },
     isShowed() {
       return this.$store.state.modals.opened === MODAL_TASK_EDIT;
     },
   },
   methods: {
     ...mapActions({
-      modalHide: "modals/hide",
-      showModal: "modals/show",
+      hideModal: "modals/hideModal",
+      showModal: "modals/showModal",
       setActiveDashboard: "dashboards/setActiveDashboard",
       createTask: "dashboards/createTask",
       editTask: "dashboards/editTask",
     }),
     onClose() {
-      this.modalHide();
+      this.hideModal();
       this.title = "";
       this.description = "";
       this.subtasks = [];
@@ -210,14 +200,15 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
           };
         });
       } else {
+        this.isEdit = false;
         this.title = "";
         this.description = "";
         this.subtasks = [];
+        const firstId = this.statusOptions.length
+          ? this.statusOptions[0].id
+          : "";
+        this.status = firstId;
       }
-    },
-    activeDashboard() {
-      const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
-      this.status = this.status ? this.status : firstId;
     },
   },
 });

@@ -31,7 +31,7 @@ export default defineComponent<MyBoardAddColumnProps, MyBoardAddColumnProps>({
   },
   methods: {
     ...mapActions({
-      showModal: "modals/show",
+      showModal: "modals/showModal",
     }),
     onAddClick() {
       this.showModal({
