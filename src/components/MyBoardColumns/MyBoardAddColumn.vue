@@ -1,7 +1,7 @@
 <template>
   <div class="my-board-column my-board-column__add">
     <div class="my-board-column_title h4"></div>
-    <button class="my-board-column_button h1">
+    <button class="my-board-column_button h1" @click="onAddClick">
       <span class="h1">+ New Column</span>
     </button>
   </div>
@@ -9,20 +9,35 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import type { Column } from "@/store/types";
-
-import type { PropType } from "vue";
+import { mapGetters, mapActions } from "vuex";
+import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
+import type { Dashboard } from "@/store/types";
 
 type MyBoardAddColumnProps = {
-  column: Column;
+  activeDashboard: Dashboard;
+
+  showModal: (props: { name: string; data: Dashboard }) => void;
+
+  onAddClick: () => void;
 };
 
 export default defineComponent<MyBoardAddColumnProps, MyBoardAddColumnProps>({
   name: "MyBoardAddColumn",
-  props: {
-    column: {
-      type: Object as PropType<Column>,
-      required: false,
+  props: {},
+  computed: {
+    ...mapGetters({
+      activeDashboard: "dashboards/activeDashboard",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      showModal: "modals/show",
+    }),
+    onAddClick() {
+      this.showModal({
+        name: MODAL_DASHBOARD_EDIT,
+        data: this.activeDashboard,
+      });
     },
   },
 });

@@ -10,7 +10,7 @@
       <div class="my-input-list_item" v-for="num of count" :key="num">
         <my-input
           :data-index="num - 1"
-          :value="values[num - 1]"
+          :value="values[num - 1].label"
           @input="onChange"
           ref="input"
           full-width
@@ -44,6 +44,11 @@ import { MyButton } from "@/components/form/MyButton";
 import MyCloseIcon from "@/components/icons/MyCloseIcon.vue";
 import type { PropType } from "vue";
 
+export type MyInputsListValue = {
+  id?: string;
+  label: string;
+};
+
 type MyInputsListProps = {
   id?: boolean;
   label?: string;
@@ -51,7 +56,7 @@ type MyInputsListProps = {
   addText?: string;
 
   count: number;
-  values: string[];
+  values: MyInputsListValue[];
 
   onAdd(): void;
   onRemove(index: number): void;
@@ -83,9 +88,9 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
     },
   },
   data() {
-    const data = (this.$attrs.value || []) as unknown as string[];
+    const data = (this.$attrs.value || []) as unknown as MyInputsListValue[];
     const count = data.length;
-    const values = count ? data.map((value) => value) : [""];
+    const values = count ? data.map((value) => value) : [{ label: "" }];
 
     return {
       count: count || 1,
@@ -95,7 +100,7 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
   methods: {
     onAdd() {
       this.count += 1;
-      this.values.push("");
+      this.values.push({ label: "" });
       this.emitChanges();
     },
     onRemove(index: number) {
@@ -108,7 +113,7 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
       if (el) {
         const value = el.value;
         const index = parseInt(el.dataset.index as string, 10);
-        this.values[index] = value;
+        this.values[index].label = value;
         this.emitChanges();
       }
     },
@@ -124,9 +129,9 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
   },
   watch: {
     "$attrs.value"() {
-      const data = (this.$attrs.value || []) as unknown as string[];
+      const data = (this.$attrs.value || []) as unknown as MyInputsListValue[];
       const count = data.length;
-      const values = count ? data.map((value) => value) : [""];
+      const values = count ? data.map((value) => value) : [{ label: "" }];
 
       this.count = count || 1;
       this.values = values;

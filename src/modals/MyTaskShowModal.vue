@@ -1,9 +1,7 @@
 <template>
   <my-modal :show="isShowed" @close="onClose">
-    <my-modal-box>
-      <my-modal-header
-        title="Research pricing points of various competitors and trial different business models"
-      >
+    <my-modal-box v-if="modalData">
+      <my-modal-header :title="modalData.title">
         <my-menu ref="menu">
           <template v-slot:activator="{ onClick }">
             <my-menu-button @click.prevent="onClick" />
@@ -18,35 +16,31 @@
         </my-menu>
       </my-modal-header>
 
-      <div class="my-modal-text">
-        <p>
-          We know what we're planning to build for version one. Now we need to
-          finalise the first pricing model we'll use. Keep iterating the
-          subtasks until we have a coherent proposition.
-        </p>
+      <div class="my-modal-text" v-show="modalData.description">
+        <p>{{ modalData.description }}</p>
       </div>
 
-      <div class="my-modal-field">
+      <div class="my-modal-field" v-show="modalData.subtasks.length">
         <MyCheckboxGroup
           name="tasks"
-          v-model="checkboxValue"
-          label="Subtasks (2 of 3)"
+          v-model="selectedSubtasks"
+          :label="completedText"
           full-width
         >
           <MyCheckbox
-            v-for="option of checkboxOptions"
-            :key="option.id"
-            :value="option.id"
-            >{{ option.label }}</MyCheckbox
+            v-for="subtask of modalData.subtasks"
+            :key="subtask.id"
+            :value="subtask.id"
+            >{{ subtask.title }}</MyCheckbox
           >
         </MyCheckboxGroup>
       </div>
 
       <div class="my-modal-field">
         <MySelect
-          :options="selectOptions"
-          v-model="selectValue"
-          label="Some label"
+          :options="statusOptions"
+          v-model="status"
+          label="Current Status"
           full-width
         />
       </div>
@@ -67,35 +61,37 @@ import {
   MODAL_TASK_SHOW,
   MODAL_TASK_DELETE,
 } from "@/store/constants";
+import type { MySelectOption } from "@/components/form/MySelect";
+import type { Dashboard, Task, TaskEditDTO } from "@/store/types";
 import type { ComponentPublicInstance, PropType } from "vue";
 
-type Option = {
-  id: string;
-  label: string;
-};
+type MyTaskShowModalProps = {
+  selectedSubtasks: string[];
 
-type MyDashboardEditModalProps = {
-  checkboxOptions: Option[];
-  checkboxValue: string;
-  selectValue: string;
-  selectOptions: Option[];
+  status: string;
+  statusOptions: MySelectOption[];
 
-  modalData: any;
+  modalData: Task | undefined;
+  activeDashboard: Dashboard | undefined;
   isShowed: boolean;
 
-  showModal: (opts: { name: string; data?: any }) => void;
   modalHide: () => void;
+  showModal: (opts: { name: string; data?: Task }) => void;
+  setActiveDashboard: (id: string) => void;
+  editTask: (props: {
+    dashboardId: string;
+    id: string;
+    data: TaskEditDTO;
+  }) => void;
+
   onClose: () => void;
-  onSubmit: () => void;
   onEditTaskClick: () => void;
   onDeleteTaskClick: () => void;
+  saveChanges: () => void;
 };
 
-export default defineComponent<
-  MyDashboardEditModalProps,
-  MyDashboardEditModalProps
->({
-  name: "MyDashboardEditModal",
+export default defineComponent<MyTaskShowModalProps, MyTaskShowModalProps>({
+  name: "MyTaskShowModal",
   components: {
     MyModal,
     MyModalBox,
@@ -109,26 +105,36 @@ export default defineComponent<
     MySelect,
   },
   props: {},
+  created() {
+    const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
+    this.status = this.status ? this.status : firstId;
+  },
   data() {
     return {
-      checkboxValue: "",
-      checkboxOptions: [
-        { id: "option 1", label: "Idle" },
-        { id: "option 2", label: "Option 2 Option 2 Option 2" },
-        { id: "option 3", label: "Option 3" },
-      ],
-      selectValue: "option 2",
-      selectOptions: [
-        { id: "option 1", label: "Option 1" },
-        { id: "option 2", label: "Option 2 Option 2 Option 2" },
-        { id: "option 3", label: "Option 3" },
-      ],
+      selectedSubtasks: [],
+      status: "",
     };
   },
   computed: {
     ...mapGetters({
       modalData: "modals/data",
+      activeDashboard: "dashboards/activeDashboard",
     }),
+    statusOptions() {
+      return this.activeDashboard
+        ? this.activeDashboard.columns.map((column) => {
+            return {
+              id: column.name,
+              label: column.name,
+            };
+          })
+        : [];
+    },
+    completedText() {
+      const total = this.modalData ? this.modalData.subtasks.length : 0;
+      const completed = this.selectedSubtasks.length;
+      return `Subtasks (${completed} of ${total})`;
+    },
     isShowed() {
       return this.$store.state.modals.opened === MODAL_TASK_SHOW;
     },
@@ -137,15 +143,11 @@ export default defineComponent<
     ...mapActions({
       modalHide: "modals/hide",
       showModal: "modals/show",
+      setActiveDashboard: "dashboards/setActiveDashboard",
+      editTask: "dashboards/editTask",
     }),
     onClose() {
       this.modalHide();
-      // this.name = "";
-      // this.columns = [];
-      // this.isEdit = false;
-    },
-    onSubmit() {
-      console.log("submit");
     },
     onEditTaskClick() {
       if (this.$refs.menu) {
@@ -155,7 +157,7 @@ export default defineComponent<
       this.$nextTick(() => {
         this.showModal({
           name: MODAL_TASK_EDIT,
-          data: {},
+          data: this.modalData,
         });
       });
     },
@@ -167,20 +169,48 @@ export default defineComponent<
       this.$nextTick(() => {
         this.showModal({
           name: MODAL_TASK_DELETE,
+          data: this.modalData,
         });
       });
+    },
+    saveChanges() {
+      if (!this.activeDashboard || !this.modalData) {
+        return;
+      }
+      this.editTask({
+        dashboardId: this.activeDashboard.id,
+        id: this.modalData.id,
+        data: {
+          status: this.status,
+          subtasks: (this.modalData.subtasks || []).map((subtask) => {
+            return {
+              id: subtask.id,
+              isCompleted: this.selectedSubtasks.indexOf(subtask.id) !== -1,
+            };
+          }),
+        },
+      });
+      this.setActiveDashboard(this.activeDashboard.id);
     },
   },
   watch: {
     modalData() {
-      // if (this.modalData) {
-      //   this.isEdit = true;
-      //   this.name = this.modalData.name;
-      //   this.columns = this.modalData.columns;
-      // } else {
-      //   this.name = "";
-      //   this.columns = [];
-      // }
+      if (this.modalData) {
+        this.status = this.modalData.status;
+        this.selectedSubtasks = (this.modalData.subtasks || [])
+          .map((subtasks) => (subtasks.isCompleted ? subtasks.id : ""))
+          .filter((el) => el);
+      }
+    },
+    activeDashboard() {
+      const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
+      this.status = this.status ? this.status : firstId;
+    },
+    status() {
+      this.saveChanges();
+    },
+    selectedSubtasks() {
+      this.saveChanges();
     },
   },
 });

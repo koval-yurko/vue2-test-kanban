@@ -10,6 +10,7 @@
       <div class="my-header_menu-holder">
         <div class="my-header_title h1">
           <span v-if="activeDashboard">{{ activeDashboard.name }}</span>
+          <span v-else>No Boards yet</span>
         </div>
         <div class="my-header_btns">
           <my-button
@@ -79,7 +80,7 @@ type MyHeaderProps = {
   activeColumn: Column | undefined;
   activeDashboard: Dashboard | undefined;
 
-  showModal(opts: { name: string; data?: any }): void;
+  showModal: (opts: { name: string; data?: Dashboard }) => void;
 
   onAddTaskClick: () => void;
   onEditDashboardClick: () => void;

@@ -17,7 +17,7 @@
           >
             <button
               class="my-sidebar_menu-button"
-              @click="setActiveDashboard(dashboard.name)"
+              @click="setActiveDashboard(dashboard.id)"
             >
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">{{
@@ -100,10 +100,10 @@ type MySidebarProps = {
   dashboards: Dashboard[];
   activeDashboard: Dashboard | undefined;
 
-  setActiveDashboard: (name: string) => void;
+  setActiveDashboard: (id: string) => void;
   toggleSidebar: () => void;
   toggleTheme: () => void;
-  showModal: (opts: { name: string; data?: any }) => void;
+  showModal: (opts: { name: string }) => void;
 };
 
 export default defineComponent<MySidebarProps, MySidebarProps>({
@@ -141,7 +141,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
       toggleSidebar: "sidebar/toggleSidebar",
       toggleTheme: "theme/toggleTheme",
       showModal: "modals/show",
-      setActiveDashboard: "dashboards/setActive",
+      setActiveDashboard: "dashboards/setActiveDashboard",
     }),
     onAddNewDashboardClick() {
       this.showModal({

@@ -8,17 +8,19 @@
       <div class="my-content">
         <my-add-board v-if="!activeDashboard" />
 
-        <my-board-columns v-if="activeDashboard">
+        <my-empty-board
+          v-if="activeDashboard && !activeDashboard.columns.length"
+        />
+
+        <my-board-columns
+          v-if="activeDashboard && activeDashboard.columns.length"
+        >
           <my-board-column
             v-for="column of activeDashboard.columns"
-            :key="column.name"
+            :key="column.id"
             :column="column"
           >
-            <my-task
-              v-for="task of column.tasks"
-              :key="task.title"
-              task="task"
-            />
+            <my-task v-for="task of column.tasks" :key="task.id" :task="task" />
           </my-board-column>
           <my-board-add-column />
         </my-board-columns>
@@ -39,6 +41,7 @@ import { mapGetters, mapActions } from "vuex";
 import { MyHeader } from "@/layout/MyHeader";
 import { MySidebar } from "@/layout/MySidebar";
 import { MyAddBoard } from "@/components/MyAddBoard";
+import { MyEmptyBoard } from "@/components/MyEmptyBoard";
 import {
   MyBoardColumns,
   MyBoardColumn,
@@ -59,6 +62,7 @@ export default defineComponent({
     MySidebar,
 
     MyAddBoard,
+    MyEmptyBoard,
     MyBoardColumns,
     MyBoardColumn,
     MyBoardAddColumn,

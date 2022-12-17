@@ -16,26 +16,54 @@ export type ModalsOpened =
   | typeof MODAL_TASK_DELETE;
 
 export type SubTask = {
+  id: string;
   title: string;
   isCompleted?: boolean;
 };
 
 export type Task = {
+  id: string;
   title: string;
   description: string;
   status: string;
   subtasks: SubTask[];
 };
 
+export type TaskCreateDTO = {
+  title: string;
+  description: string;
+  subtasks: Array<{ id?: string; label: string }>;
+  status: string;
+};
+
+export type TaskEditDTO = {
+  title?: string;
+  description?: string;
+  subtasks?: Array<{ id?: string; label?: string; isCompleted?: boolean }>;
+  status?: string;
+};
+
 export type Column = {
+  id: string;
   name: string;
   color: string;
   tasks: Task[];
 };
 
 export type Dashboard = {
+  id: string;
   name: string;
   columns: Column[];
+};
+
+export type DashboardCreateDTO = {
+  name: string;
+  columns: Array<{ id?: string; label: string }>;
+};
+
+export type DashboardEditDTO = {
+  name: string;
+  columns: Array<{ id?: string; label: string }>;
 };
 
 export type ThemeState = {

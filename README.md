@@ -21,3 +21,12 @@ https://failwin.github.io/vue2-test-kanban/index.html#/
 
 ### Styleguide
 https://failwin.github.io/vue2-test-kanban/index.html#/demo
+
+
+## TODO
+* delete modals texts update
+* columns names unique
+* validation * errors
+* statusOptions to global state 
+* mobile menu
+* drag & drop

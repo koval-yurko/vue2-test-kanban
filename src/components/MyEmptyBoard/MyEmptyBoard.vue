@@ -1,40 +1,49 @@
 <template>
   <div class="my-add-board">
     <div class="my-add-board_title h2">
-      No boards yet. Create a new one to get started.
+      This board is empty. Create a new column to get started.
     </div>
     <my-button
       class="my-add-board_button"
       size="large"
-      @click="onAddNewDashboardClick"
+      @click="onAddNewColumnClick"
     >
-      + Create New Board
+      + Add New Column
     </my-button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { MyButton } from "@/components/form/MyButton";
+import type { Dashboard } from "@/store/types";
 import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
 
-type MyAddBoardProps = {
-  onAddNewDashboardClick: () => void;
+type MyEmptyBoardProps = {
+  activeDashboard: Dashboard;
 
-  showModal: (opts: { name: string }) => void;
+  onAddNewColumnClick: () => void;
+
+  showModal: (opts: { name: string; data: Dashboard }) => void;
 };
 
-export default defineComponent<MyAddBoardProps, MyAddBoardProps>({
-  name: "MyAddBoard",
+export default defineComponent<MyEmptyBoardProps, MyEmptyBoardProps>({
+  name: "MyEmptyBoard",
   components: { MyButton },
+  computed: {
+    ...mapGetters({
+      activeDashboard: "dashboards/activeDashboard",
+    }),
+  },
   methods: {
     ...mapActions({
       showModal: "modals/show",
     }),
-    onAddNewDashboardClick() {
+    onAddNewColumnClick() {
       this.showModal({
         name: MODAL_DASHBOARD_EDIT,
+        data: this.activeDashboard,
       });
     },
   },

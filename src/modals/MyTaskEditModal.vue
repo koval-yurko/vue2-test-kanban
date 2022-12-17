@@ -15,6 +15,16 @@
         </div>
 
         <div class="my-modal-field">
+          <my-textarea
+            v-model="description"
+            name="description"
+            label="Description"
+            placeholder="e.g. It’s always good to take a break. This 15 minute break will recharge the batteries a little."
+            full-width
+          />
+        </div>
+
+        <div class="my-modal-field">
           <my-inputs-list
             v-model="subtasks"
             name="subtasks"
@@ -25,8 +35,9 @@
 
         <div class="my-modal-field">
           <MySelect
-            :options="selectOptions"
-            v-model="selectValue"
+            :options="statusOptions"
+            v-model="status"
+            name="status"
             label="Status"
             full-width
           />
@@ -47,26 +58,41 @@ import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
 import { MyButton } from "@/components/form/MyButton";
 import { MySelect } from "@/components/form/MySelect";
 import { MyInput } from "@/components/form/MyInput";
+import { MyTextarea } from "@/components/form/MyTextarea";
 import { MyInputsList } from "@/components/form/MyInputsList";
-import { MODAL_TASK_EDIT } from "@/store/constants";
+import { MODAL_TASK_EDIT, MODAL_TASK_SHOW } from "@/store/constants";
+import type { MySelectOption } from "@/components/form/MySelect";
+import type { MyInputsListValue } from "@/components/form/MyInputsList";
+import type {
+  Dashboard,
+  Task,
+  TaskCreateDTO,
+  TaskEditDTO,
+} from "@/store/types";
 import type { PropType } from "vue";
-
-type Option = {
-  id: string;
-  label: string;
-};
 
 type MyTaskEditModalProps = {
   title: string;
-  subtasks: string[];
-  selectValue: string;
-  selectOptions: Option[];
+  description: string;
+  subtasks: MyInputsListValue[];
+  status: string;
+
+  statusOptions: MySelectOption[];
   isEdit?: boolean;
 
-  modalData: any;
+  modalData: Task | undefined;
+  activeDashboard: Dashboard | undefined;
   isShowed: boolean;
 
   modalHide: () => void;
+  showModal: (opts: { name: string; data?: Task }) => void;
+  setActiveDashboard: (id: string) => void;
+  createTask: (data: { dashboardId: string; data: TaskCreateDTO }) => void;
+  editTask: (data: {
+    dashboardId: string;
+    id: string;
+    data: TaskEditDTO;
+  }) => Task;
   onClose: () => void;
   onSubmit: () => void;
 };
@@ -80,26 +106,38 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
     MyButton,
     MySelect,
     MyInput,
+    MyTextarea,
     MyInputsList,
   },
   props: {},
+  created() {
+    const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
+    this.status = this.status ? this.status : firstId;
+  },
   data() {
     return {
       title: "",
+      description: "",
       subtasks: [],
-      selectValue: "option 2",
-      selectOptions: [
-        { id: "option 1", label: "Option 1" },
-        { id: "option 2", label: "Option 2 Option 2 Option 2" },
-        { id: "option 3", label: "Option 3" },
-      ],
+      status: "",
       isEdit: false,
     };
   },
   computed: {
     ...mapGetters({
       modalData: "modals/data",
+      activeDashboard: "dashboards/activeDashboard",
     }),
+    statusOptions() {
+      return this.activeDashboard
+        ? this.activeDashboard.columns.map((column) => {
+            return {
+              id: column.name,
+              label: column.name,
+            };
+          })
+        : [];
+    },
     isShowed() {
       return this.$store.state.modals.opened === MODAL_TASK_EDIT;
     },
@@ -107,27 +145,79 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
   methods: {
     ...mapActions({
       modalHide: "modals/hide",
+      showModal: "modals/show",
+      setActiveDashboard: "dashboards/setActiveDashboard",
+      createTask: "dashboards/createTask",
+      editTask: "dashboards/editTask",
     }),
     onClose() {
       this.modalHide();
-      // this.name = "";
-      // this.columns = [];
+      this.title = "";
+      this.description = "";
+      this.subtasks = [];
+      this.status = "";
       this.isEdit = false;
     },
-    onSubmit() {
-      console.log("submit");
+    async onSubmit() {
+      if (!this.activeDashboard) {
+        return;
+      }
+      if (this.modalData) {
+        // edit
+        const data: TaskEditDTO = {
+          title: this.title,
+          description: this.description,
+          status: this.status,
+          subtasks: this.subtasks,
+        };
+        const newTask = await this.editTask({
+          dashboardId: this.activeDashboard.id,
+          id: this.modalData.id,
+          data,
+        });
+        this.setActiveDashboard(this.activeDashboard.id);
+        this.onClose();
+
+        this.showModal({
+          name: MODAL_TASK_SHOW,
+          data: newTask,
+        });
+      } else {
+        // create
+        const data: TaskCreateDTO = {
+          title: this.title,
+          description: this.description,
+          status: this.status,
+          subtasks: this.subtasks,
+        };
+        this.createTask({ dashboardId: this.activeDashboard.id, data });
+        this.setActiveDashboard(this.activeDashboard.id);
+        this.onClose();
+      }
     },
   },
   watch: {
     modalData() {
       if (this.modalData) {
         this.isEdit = true;
-        // this.name = this.modalData.name;
-        // this.columns = this.modalData.columns;
+        this.title = this.modalData.title;
+        this.description = this.modalData.description;
+        this.status = this.modalData.status;
+        this.subtasks = (this.modalData.subtasks || []).map((subtask) => {
+          return {
+            id: subtask.id,
+            label: subtask.title,
+          };
+        });
       } else {
-        // this.name = "";
-        // this.columns = [];
+        this.title = "";
+        this.description = "";
+        this.subtasks = [];
       }
+    },
+    activeDashboard() {
+      const firstId = this.statusOptions.length ? this.statusOptions[0].id : "";
+      this.status = this.status ? this.status : firstId;
     },
   },
 });

@@ -1,25 +1,53 @@
 <template>
-  <div class="my-task">
-    <div class="my-task_title">{{ task.title }}</div>
-    <div class="my-task_text h4">{{ task.description }}</div>
+  <div class="my-task" @click="onShowClick">
+    <div class="my-task_title h3">{{ task.title }}</div>
+    <div class="my-task_text h4">{{ completedText }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapActions, mapGetters } from "vuex";
+import { MODAL_TASK_SHOW } from "@/store/constants";
 import type { PropType } from "vue";
 import type { Task } from "@/store/types";
 
-type MyBoardColumnsProps = {
+type MyTaskProps = {
   task: Task;
+
+  completedText: string;
+
+  showModal: (opts: { name: string; data?: Task }) => void;
+
+  onShowClick: () => void;
 };
 
-export default defineComponent<MyBoardColumnsProps, MyBoardColumnsProps>({
-  name: "MyBoardColumns",
+export default defineComponent<MyTaskProps, MyTaskProps>({
+  name: "MyTask",
   props: {
     task: {
       type: Object as PropType<Task>,
       required: false,
+    },
+  },
+  computed: {
+    completedText() {
+      const total = this.task.subtasks.length;
+      const completed = this.task.subtasks.filter(
+        (el) => el.isCompleted
+      ).length;
+      return `${completed} of ${total} subtasks`;
+    },
+  },
+  methods: {
+    ...mapActions({
+      showModal: "modals/show",
+    }),
+    onShowClick() {
+      this.showModal({
+        name: MODAL_TASK_SHOW,
+        data: this.task,
+      });
     },
   },
 });

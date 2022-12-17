@@ -27,6 +27,22 @@
 
       <br />
       <br />
+      <MyTextarea
+        v-model="inputValue"
+        placeholder="Placeholder text"
+        label="Some label"
+        rows="3"
+      />
+      <MyTextarea
+        v-model="inputValue2"
+        placeholder="Placeholder text"
+        label="Some label"
+        :error="inputValue2"
+      />
+      <MyTextarea v-model="inputValue3" label="Some label" />
+
+      <br />
+      <br />
       <MyInputsList
         class="list-example"
         label="Some label"
@@ -341,6 +357,7 @@ import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { MyButton } from "@/components/form/MyButton";
 import { MyInput } from "@/components/form/MyInput";
+import { MyTextarea } from "@/components/form/MyTextarea";
 import { MySelect } from "@/components/form/MySelect";
 import { MyCheckboxGroup, MyCheckbox } from "@/components/form/MyCheckboxGroup";
 import { MyInputsList } from "@/components/form/MyInputsList";
@@ -353,6 +370,7 @@ export default defineComponent({
   components: {
     MyButton,
     MyInput,
+    MyTextarea,
     MySelect,
     MyCheckboxGroup,
     MyCheckbox,
@@ -382,7 +400,10 @@ export default defineComponent({
         { id: "option 2", label: "Option 2 Option 2 Option 2" },
         { id: "option 3", label: "Option 3" },
       ],
-      inputList: ["aaa", "bbb"],
+      inputList: [
+        { id: "aaa", label: "Aaa" },
+        { id: "bbb", label: "Bbb" },
+      ],
       modal: false,
     };
   },

@@ -39,20 +39,24 @@ import { MyInput } from "@/components/form/MyInput";
 import { MyInputsList } from "@/components/form/MyInputsList";
 import { MyButton } from "@/components/form/MyButton";
 import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
-import type { Dashboard } from "@/store/types";
-import type { PropType } from "vue";
+import type {
+  Dashboard,
+  DashboardCreateDTO,
+  DashboardEditDTO,
+} from "@/store/types";
+import type { MyInputsListValue } from "@/components/form/MyInputsList";
 
 type MyDashboardEditModalProps = {
   name: string;
-  columns: string[];
+  columns: MyInputsListValue[];
   isEdit?: boolean;
 
-  modalData: Dashboard;
+  modalData: Dashboard | undefined;
   isShowed: boolean;
 
-  setActiveDashboard: (name: string) => void;
-  addDashboard: (dashboard: Dashboard) => void;
-  editDashboard: (payload: { name: string; board: Dashboard }) => void;
+  setActiveDashboard: (id: string) => void;
+  createDashboard: (dashboard: DashboardCreateDTO) => Dashboard;
+  editDashboard: (payload: { id: string; data: DashboardEditDTO }) => Dashboard;
   modalHide: () => void;
   onClose: () => void;
   onSubmit: () => void;
@@ -90,8 +94,8 @@ export default defineComponent<
   methods: {
     ...mapActions({
       modalHide: "modals/hide",
-      addDashboard: "dashboards/addDashboard",
-      setActiveDashboard: "dashboards/setActive",
+      createDashboard: "dashboards/createDashboard",
+      setActiveDashboard: "dashboards/setActiveDashboard",
       editDashboard: "dashboards/editDashboard",
     }),
     onClose() {
@@ -100,26 +104,26 @@ export default defineComponent<
       this.columns = [];
       this.isEdit = false;
     },
-    onSubmit() {
-      const dashboard: Dashboard = {
-        name: this.name,
-        columns: this.columns.map((column) => {
-          return {
-            name: column,
-            tasks: [],
-          };
-        }),
-      };
-      console.log();
-
-      if (this.isEdit) {
+    async onSubmit() {
+      if (this.modalData) {
         // edit
-        this.editDashboard({ name: this.modalData.name, board: dashboard });
-        this.setActiveDashboard(dashboard.name);
+        const dashboard: DashboardEditDTO = {
+          name: this.name,
+          columns: this.columns,
+        };
+        const newDashboard = await this.editDashboard({
+          id: this.modalData.id,
+          data: dashboard,
+        });
+        this.setActiveDashboard(newDashboard.id);
       } else {
         // create
-        this.addDashboard(dashboard);
-        this.setActiveDashboard(dashboard.name);
+        const dashboard: DashboardCreateDTO = {
+          name: this.name,
+          columns: this.columns,
+        };
+        const newDashboard = await this.createDashboard(dashboard);
+        this.setActiveDashboard(newDashboard.id);
       }
       this.onClose();
     },
@@ -129,8 +133,11 @@ export default defineComponent<
       if (this.modalData) {
         this.isEdit = true;
         this.name = this.modalData.name;
-        this.columns = this.modalData.columns.map((column) => {
-          return column.name;
+        this.columns = (this.modalData.columns || []).map((column) => {
+          return {
+            id: column.id,
+            label: column.name,
+          };
         });
       } else {
         this.name = "";

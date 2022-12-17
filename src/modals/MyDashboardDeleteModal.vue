@@ -12,12 +12,7 @@
         </div>
 
         <div class="my-modal-controls">
-          <my-button
-            color="destructive"
-            type="button"
-            full-width
-            @click="onDeleteClick"
-          >
+          <my-button color="destructive" type="submit" full-width>
             Delete
           </my-button>
           <my-button
@@ -43,14 +38,14 @@ import type { Dashboard } from "@/store/types";
 import type { PropType } from "vue";
 
 type MyDashboardEditModalProps = {
-  modalData: any;
+  modalData: Dashboard;
   isShowed: boolean;
   dashboards: Dashboard[];
   activeDashboard: Dashboard | undefined;
 
   modalHide: () => void;
-  deleteDashboard: (name: string) => void;
-  setActiveDashboard: (name: string) => void;
+  deleteDashboard: (id: string) => void;
+  setActiveDashboard: (id: string) => void;
 
   onClose: () => void;
   onSubmit: () => void;
@@ -84,24 +79,21 @@ export default defineComponent<
     ...mapActions({
       modalHide: "modals/hide",
       deleteDashboard: "dashboards/deleteDashboard",
-      setActiveDashboard: "dashboards/setActive",
+      setActiveDashboard: "dashboards/setActiveDashboard",
     }),
     onClose() {
       this.modalHide();
     },
     onSubmit() {
-      console.log("submit");
-    },
-    onCancelClick() {
-      this.onClose();
-    },
-    onDeleteClick() {
       if (this.activeDashboard) {
-        this.deleteDashboard(this.activeDashboard.name);
+        this.deleteDashboard(this.activeDashboard.id);
         this.setActiveDashboard(
-          this.dashboards[0] ? this.dashboards[0].name : ""
+          this.dashboards[0] ? this.dashboards[0].id : ""
         );
       }
+      this.onClose();
+    },
+    onCancelClick() {
       this.onClose();
     },
   },

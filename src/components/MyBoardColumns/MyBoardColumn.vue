@@ -1,7 +1,10 @@
 <template>
   <div class="my-board-column">
     <div class="my-board-column_title h4">
-      <span class="my-board-column_title_color"></span>
+      <span
+        class="my-board-column_title_color"
+        :style="{ backgroundColor: column.color }"
+      ></span>
       {{ column.name }}
     </div>
     <slot></slot>
