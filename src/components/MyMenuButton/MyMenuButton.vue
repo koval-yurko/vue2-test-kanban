@@ -39,7 +39,13 @@ export default defineComponent<MyMenuButtonProps, MyMenuButtonProps>({
 
   transition: color 0.3s ease;
 }
-.menu-button:hover {
+.menu-button:disabled {
+  color: var(--color-gray-4);
+  opacity: 0.5;
+  cursor: default;
+}
+
+.menu-button:not(:disabled):hover {
   color: var(--color-primary);
 }
 

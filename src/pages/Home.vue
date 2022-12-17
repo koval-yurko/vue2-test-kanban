@@ -6,40 +6,22 @@
       <my-sidebar />
 
       <div class="my-content">
-        <div class="columns">
-          <div class="column">
-            <div class="row">Column 1 Row 1</div>
-            <div class="row">Column 1 Row 2</div>
-            <div class="row">Column 1 Row 3</div>
-          </div>
+        <my-add-board v-if="!activeDashboard" />
 
-          <div class="column">
-            <div class="row">Column 2 Row 1</div>
-            <div class="row">
-              <button @click="onShowTaskClick">SHOW TASK</button>
-            </div>
-            <div class="row">Column 2 Row 3</div>
-            <div class="row">Column 2 Row 1</div>
-          </div>
-
-          <div class="column">
-            <div class="row">Column 3 Row 1</div>
-            <div class="row">Column 3 Row 2</div>
-            <div class="row">Column 3 Row 3</div>
-          </div>
-
-          <div class="column">
-            <div class="row">Column 3 Row 1</div>
-            <div class="row">Column 3 Row 2</div>
-            <div class="row">Column 3 Row 3</div>
-          </div>
-
-          <div class="column">
-            <div class="row">Column 3 Row 1</div>
-            <div class="row">Column 3 Row 2</div>
-            <div class="row">Column 3 Row 3</div>
-          </div>
-        </div>
+        <my-board-columns v-if="activeDashboard">
+          <my-board-column
+            v-for="column of activeDashboard.columns"
+            :key="column.name"
+            :column="column"
+          >
+            <my-task
+              v-for="task of column.tasks"
+              :key="task.title"
+              task="task"
+            />
+          </my-board-column>
+          <my-board-add-column />
+        </my-board-columns>
       </div>
     </div>
 
@@ -56,6 +38,13 @@ import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
 import { MyHeader } from "@/layout/MyHeader";
 import { MySidebar } from "@/layout/MySidebar";
+import { MyAddBoard } from "@/components/MyAddBoard";
+import {
+  MyBoardColumns,
+  MyBoardColumn,
+  MyBoardAddColumn,
+} from "@/components/MyBoardColumns";
+import { MyTask } from "@/components/MyTask";
 import MyDashboardEditModal from "@/modals/MyDashboardEditModal.vue";
 import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
 import MyTaskShowModal from "@/modals/MyTaskShowModal.vue";
@@ -68,21 +57,34 @@ export default defineComponent({
   components: {
     MyHeader,
     MySidebar,
+
+    MyAddBoard,
+    MyBoardColumns,
+    MyBoardColumn,
+    MyBoardAddColumn,
+    MyTask,
+
     MyDashboardEditModal,
     MyDashboardDeleteModal,
     MyTaskShowModal,
     MyTaskEditModal,
     MyTaskDeleteModal,
   },
+  created() {
+    this.loadDashboards();
+  },
   computed: {
     ...mapGetters({
       sidebarVisible: "sidebar/isVisible",
+      activeDashboard: "dashboards/activeDashboard",
     }),
   },
   methods: {
     ...mapActions({
       toggleSidebar: "sidebar/toggleSidebar",
       showModal: "modals/show",
+      addDashboard: "dashboards/addDashboard",
+      loadDashboards: "dashboards/loadDashboards",
     }),
     onShowTaskClick() {
       this.showModal({
@@ -113,21 +115,5 @@ export default defineComponent({
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
-}
-
-.columns {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-}
-
-.column {
-  width: 300px;
-  flex-shrink: 0;
-  border: solid 1px green;
-}
-.row {
-  height: 200px;
-  border: solid 1px blue;
 }
 </style>

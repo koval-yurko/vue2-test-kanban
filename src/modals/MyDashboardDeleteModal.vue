@@ -12,10 +12,19 @@
         </div>
 
         <div class="my-modal-controls">
-          <my-button color="destructive" type="button" full-width
-            >Delete</my-button
+          <my-button
+            color="destructive"
+            type="button"
+            full-width
+            @click="onDeleteClick"
           >
-          <my-button color="secondary" type="submit" full-width
+            Delete
+          </my-button>
+          <my-button
+            color="secondary"
+            type="submit"
+            full-width
+            @click="onCancelClick"
             >Cancel</my-button
           >
         </div>
@@ -26,19 +35,27 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapActions, mapGetters } from "vuex";
 import { MyModal, MyModalBox, MyModalHeader } from "@/components/MyModal";
 import { MyButton } from "@/components/form/MyButton";
-import type { PropType } from "vue";
-import { mapActions, mapGetters } from "vuex";
 import { MODAL_DASHBOARD_DELETE } from "@/store/constants";
+import type { Dashboard } from "@/store/types";
+import type { PropType } from "vue";
 
 type MyDashboardEditModalProps = {
   modalData: any;
   isShowed: boolean;
+  dashboards: Dashboard[];
+  activeDashboard: Dashboard | undefined;
 
   modalHide: () => void;
+  deleteDashboard: (name: string) => void;
+  setActiveDashboard: (name: string) => void;
+
   onClose: () => void;
   onSubmit: () => void;
+  onCancelClick: () => void;
+  onDeleteClick: () => void;
 };
 
 export default defineComponent<
@@ -56,6 +73,8 @@ export default defineComponent<
   computed: {
     ...mapGetters({
       modalData: "modals/data",
+      dashboards: "dashboards/dashboards",
+      activeDashboard: "dashboards/activeDashboard",
     }),
     isShowed() {
       return this.$store.state.modals.opened === MODAL_DASHBOARD_DELETE;
@@ -64,12 +83,26 @@ export default defineComponent<
   methods: {
     ...mapActions({
       modalHide: "modals/hide",
+      deleteDashboard: "dashboards/deleteDashboard",
+      setActiveDashboard: "dashboards/setActive",
     }),
     onClose() {
       this.modalHide();
     },
     onSubmit() {
       console.log("submit");
+    },
+    onCancelClick() {
+      this.onClose();
+    },
+    onDeleteClick() {
+      if (this.activeDashboard) {
+        this.deleteDashboard(this.activeDashboard.name);
+        this.setActiveDashboard(
+          this.dashboards[0] ? this.dashboards[0].name : ""
+        );
+      }
+      this.onClose();
     },
   },
 });

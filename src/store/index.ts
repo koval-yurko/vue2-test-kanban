@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import theme from "./theme";
 import sidebar from "./sidebar";
 import modals from "./modals";
+import dashboards from "./dashboards";
 
 Vue.use(Vuex);
 
@@ -12,5 +13,6 @@ export default new Vuex.Store({
     theme,
     sidebar,
     modals,
+    dashboards,
   },
 });

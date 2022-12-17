@@ -15,6 +15,29 @@ export type ModalsOpened =
   | typeof MODAL_TASK_EDIT
   | typeof MODAL_TASK_DELETE;
 
+export type SubTask = {
+  title: string;
+  isCompleted?: boolean;
+};
+
+export type Task = {
+  title: string;
+  description: string;
+  status: string;
+  subtasks: SubTask[];
+};
+
+export type Column = {
+  name: string;
+  color: string;
+  tasks: Task[];
+};
+
+export type Dashboard = {
+  name: string;
+  columns: Column[];
+};
+
 export type ThemeState = {
   theme: typeof THEME_WHITE | typeof THEME_BLACK;
 };
@@ -28,8 +51,14 @@ export type ModalsState = {
   data: any;
 };
 
+export type DashboardsState = {
+  dashboards: Dashboard[];
+  activeDashboard: Dashboard | undefined;
+};
+
 export type RootState = {
   theme: ThemeState;
   sidebar: SidebarState;
   modals: ModalsState;
+  dashboards: DashboardsState;
 };

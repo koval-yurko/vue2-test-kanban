@@ -19,7 +19,7 @@
             v-model="columns"
             name="columns"
             :label="isEdit ? 'Board Columns' : 'Columns'"
-            add-text="+ Add New Subtask"
+            add-text="+ Add New Column"
           />
         </div>
 
@@ -39,6 +39,7 @@ import { MyInput } from "@/components/form/MyInput";
 import { MyInputsList } from "@/components/form/MyInputsList";
 import { MyButton } from "@/components/form/MyButton";
 import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
+import type { Dashboard } from "@/store/types";
 import type { PropType } from "vue";
 
 type MyDashboardEditModalProps = {
@@ -46,9 +47,12 @@ type MyDashboardEditModalProps = {
   columns: string[];
   isEdit?: boolean;
 
-  modalData: any;
+  modalData: Dashboard;
   isShowed: boolean;
 
+  setActiveDashboard: (name: string) => void;
+  addDashboard: (dashboard: Dashboard) => void;
+  editDashboard: (payload: { name: string; board: Dashboard }) => void;
   modalHide: () => void;
   onClose: () => void;
   onSubmit: () => void;
@@ -86,6 +90,9 @@ export default defineComponent<
   methods: {
     ...mapActions({
       modalHide: "modals/hide",
+      addDashboard: "dashboards/addDashboard",
+      setActiveDashboard: "dashboards/setActive",
+      editDashboard: "dashboards/editDashboard",
     }),
     onClose() {
       this.modalHide();
@@ -94,7 +101,27 @@ export default defineComponent<
       this.isEdit = false;
     },
     onSubmit() {
-      console.log("submit");
+      const dashboard: Dashboard = {
+        name: this.name,
+        columns: this.columns.map((column) => {
+          return {
+            name: column,
+            tasks: [],
+          };
+        }),
+      };
+      console.log();
+
+      if (this.isEdit) {
+        // edit
+        this.editDashboard({ name: this.modalData.name, board: dashboard });
+        this.setActiveDashboard(dashboard.name);
+      } else {
+        // create
+        this.addDashboard(dashboard);
+        this.setActiveDashboard(dashboard.name);
+      }
+      this.onClose();
     },
   },
   watch: {
@@ -102,7 +129,9 @@ export default defineComponent<
       if (this.modalData) {
         this.isEdit = true;
         this.name = this.modalData.name;
-        this.columns = this.modalData.columns;
+        this.columns = this.modalData.columns.map((column) => {
+          return column.name;
+        });
       } else {
         this.name = "";
         this.columns = [];

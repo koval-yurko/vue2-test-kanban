@@ -1,25 +1,28 @@
 <template>
   <div class="my-sidebar" :class="{ 'my-sidebar__hidden': !sidebarVisible }">
     <div class="my-sidebar_content">
-      <div class="my-sidebar_total h4">ALL BOARDS (3)</div>
+      <div class="my-sidebar_total h4">
+        ALL BOARDS ({{ dashboards.length }})
+      </div>
       <div class="my-sidebar_menu-scroll">
         <ul class="my-sidebar_menu">
-          <li class="my-sidebar_menu-item my-sidebar_menu-item__active">
-            <button class="my-sidebar_menu-button">
+          <li
+            class="my-sidebar_menu-item"
+            :class="{
+              'my-sidebar_menu-item__active':
+                activeDashboard && activeDashboard.name === dashboard.name,
+            }"
+            v-for="dashboard of dashboards"
+            :key="dashboard.name"
+          >
+            <button
+              class="my-sidebar_menu-button"
+              @click="setActiveDashboard(dashboard.name)"
+            >
               <my-board-icon class="my-sidebar_menu-item-icon" />
-              <span class="my-sidebar_menu-item-text h3">Text</span>
-            </button>
-          </li>
-          <li class="my-sidebar_menu-item">
-            <button class="my-sidebar_menu-button">
-              <my-board-icon class="my-sidebar_menu-item-icon" />
-              <span class="my-sidebar_menu-item-text h3">Text</span>
-            </button>
-          </li>
-          <li class="my-sidebar_menu-item">
-            <button class="my-sidebar_menu-button">
-              <my-board-icon class="my-sidebar_menu-item-icon" />
-              <span class="my-sidebar_menu-item-text h3">Text</span>
+              <span class="my-sidebar_menu-item-text h3">{{
+                dashboard.name
+              }}</span>
             </button>
           </li>
           <li class="my-sidebar_menu-item my-sidebar_menu-item__new">
@@ -80,6 +83,7 @@ import MyEyeOpenIcon from "@/components/icons/MyEyeOpenIcon.vue";
 import MySunIcon from "@/components/icons/MySunIcon.vue";
 import MyMoonIcon from "@/components/icons/MyMoonIcon.vue";
 import { MODAL_DASHBOARD_EDIT } from "@/store/constants";
+import type { Dashboard } from "@/store/types";
 import type { PropType } from "vue";
 
 type Size = "small" | "large";
@@ -93,9 +97,13 @@ type MySidebarProps = {
   onAddNewDashboardClick: () => void;
   sidebarVisible: boolean;
   theme: string;
-  toggleSidebar(): void;
-  toggleTheme(): void;
-  showModal(opts: { name: string; data?: any }): void;
+  dashboards: Dashboard[];
+  activeDashboard: Dashboard | undefined;
+
+  setActiveDashboard: (name: string) => void;
+  toggleSidebar: () => void;
+  toggleTheme: () => void;
+  showModal: (opts: { name: string; data?: any }) => void;
 };
 
 export default defineComponent<MySidebarProps, MySidebarProps>({
@@ -124,6 +132,8 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
     ...mapGetters({
       sidebarVisible: "sidebar/isVisible",
       theme: "theme/activeTheme",
+      dashboards: "dashboards/dashboards",
+      activeDashboard: "dashboards/activeDashboard",
     }),
   },
   methods: {
@@ -131,6 +141,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
       toggleSidebar: "sidebar/toggleSidebar",
       toggleTheme: "theme/toggleTheme",
       showModal: "modals/show",
+      setActiveDashboard: "dashboards/setActive",
     }),
     onAddNewDashboardClick() {
       this.showModal({
@@ -155,6 +166,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
   width: var(--sidebar-width);
   padding-bottom: 33px;
   background: var(--sidebar-bg-color);
+  border-right: solid 1px var(--sidebar-border-color);
 
   transition: left 0.3s ease;
   z-index: var(--z-index-sidebar-show);

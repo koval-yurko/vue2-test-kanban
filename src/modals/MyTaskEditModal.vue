@@ -33,7 +33,7 @@
         </div>
 
         <my-button type="submit" full-width>{{
-          isEdit ? "Save Changes" : "Create New Board"
+          isEdit ? "Save Changes" : "Create Task"
         }}</my-button>
       </form>
     </my-modal-box>

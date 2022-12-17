@@ -8,18 +8,21 @@
         <my-logo-icon class="my-header_logo" />
       </div>
       <div class="my-header_menu-holder">
-        <div class="my-header_title h1">Platform Launch</div>
+        <div class="my-header_title h1">
+          <span v-if="activeDashboard">{{ activeDashboard.name }}</span>
+        </div>
         <div class="my-header_btns">
           <my-button
             class="my-header_btn-add my-header_btn-add__desktop"
             size="large"
-            :disabled="false"
+            :disabled="!activeColumn"
             @click="onAddTaskClick"
             >+ Add New Task</my-button
           >
           <my-button
             class="my-header_btn-add my-header_btn-add__mobile"
-            disabled
+            @click="onAddTaskClick"
+            :disabled="!activeColumn"
           >
             <my-plus-icon />
           </my-button>
@@ -28,6 +31,7 @@
               <my-menu-button
                 class="my-header-menu-btn"
                 @click.prevent="onClick"
+                :disabled="!activeDashboard"
               />
             </template>
 
@@ -60,6 +64,7 @@ import {
   MODAL_DASHBOARD_DELETE,
   MODAL_TASK_EDIT,
 } from "@/store/constants";
+import type { Dashboard, Column } from "@/store/types";
 import type { PropType, ComponentPublicInstance } from "vue";
 
 type Size = "small" | "large";
@@ -71,6 +76,8 @@ type MyHeaderProps = {
   color?: Color;
 
   sidebarVisible: boolean;
+  activeColumn: Column | undefined;
+  activeDashboard: Dashboard | undefined;
 
   showModal(opts: { name: string; data?: any }): void;
 
@@ -105,6 +112,8 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   computed: {
     ...mapGetters({
       sidebarVisible: "sidebar/isVisible",
+      activeColumn: "dashboards/activeColumn",
+      activeDashboard: "dashboards/activeDashboard",
     }),
   },
   methods: {
@@ -119,7 +128,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
     onEditDashboardClick() {
       this.showModal({
         name: MODAL_DASHBOARD_EDIT,
-        data: { name: "Yura", columns: ["aaa"] },
+        data: this.activeDashboard,
       });
       if (this.$refs.menu) {
         const menu = this.$refs.menu as ComponentPublicInstance<typeof MyMenu>;
@@ -173,7 +182,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
 }
 
 .my-header_logo-holder__wide {
-  width: var(--sidebar-width);
+  width: calc(var(--sidebar-width) + 1px);
 }
 
 .my-header_menu-holder {
