@@ -45,11 +45,8 @@ export default defineComponent<MyModalProps, MyModalProps>({
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: stretch;
-  align-items: stretch;
+  bottom: 0;
+  right: 0;
 
   opacity: 1;
   z-index: var(--z-index-modal);
@@ -67,11 +64,19 @@ export default defineComponent<MyModalProps, MyModalProps>({
 
 .my-modal_content {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  height: 100%;
+  padding: 15px;
+  outline: 0;
+  overflow: hidden auto;
+  text-align: center;
   z-index: var(--z-index-modal-content);
+}
+.my-modal_content:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  width: 0;
 }
 
 .my-modal-enter-active {

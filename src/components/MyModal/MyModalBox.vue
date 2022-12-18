@@ -30,15 +30,17 @@ export default defineComponent<MyModalBoxProps, MyModalBoxProps>({
 
 <style>
 .my-modal-box {
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
+  vertical-align: middle;
   padding: 32px;
   width: 100%;
   max-width: 480px;
-  background: var(--modal-box-bg-color);
+  overflow-y: auto;
+  text-align: left;
   border-radius: 6px;
-  box-sizing: border-box;
   color: var(--modal-box-text-color);
+  background: var(--modal-box-bg-color);
+  box-sizing: border-box;
 }
 
 .my-modal-field {
