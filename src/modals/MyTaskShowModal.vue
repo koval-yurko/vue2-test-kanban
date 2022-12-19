@@ -20,7 +20,10 @@
         <p>{{ modalData.description }}</p>
       </div>
 
-      <div class="my-modal-field" v-show="modalData.subtasks.length">
+      <div
+        class="my-modal-field"
+        v-show="modalData.subtasks && modalData.subtasks.length"
+      >
         <MyCheckboxGroup
           name="tasks"
           v-model="selectedSubtasks"
@@ -118,7 +121,7 @@ export default defineComponent<MyTaskShowModalProps, MyTaskShowModalProps>({
       statusOptions: "dashboards/statusOptions",
     }),
     completedText() {
-      const total = this.modalData ? this.modalData.subtasks.length : 0;
+      const total = this.modalData ? (this.modalData.subtasks || []).length : 0;
       const completed = this.selectedSubtasks.length;
       return `Subtasks (${completed} of ${total})`;
     },

@@ -1,13 +1,13 @@
 <template>
   <my-modal :show="isShowed" @close="onClose">
-    <my-modal-box>
+    <my-modal-box v-if="modalData">
       <my-modal-header title="Delete this task?" color="destructive" />
 
       <form @submit.prevent="onSubmit">
         <div class="my-modal-text">
           <p>
-            Are you sure you want to delete the ‘Build settings UI’ task and its
-            subtasks? This action cannot be reversed.
+            Are you sure you want to delete the ‘{{ modalData.title }}’ task and
+            its subtasks? This action cannot be reversed.
           </p>
         </div>
 

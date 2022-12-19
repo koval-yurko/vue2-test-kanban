@@ -139,6 +139,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
     onDeleteDashboardClick() {
       this.showModal({
         name: MODAL_DASHBOARD_DELETE,
+        data: this.activeDashboard,
       });
       if (this.$refs.menu) {
         const menu = this.$refs.menu as ComponentPublicInstance<typeof MyMenu>;

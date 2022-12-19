@@ -11,6 +11,7 @@
         <my-input
           :data-index="num - 1"
           :value="values[num - 1].label"
+          :error="inputsErrors[num - 1]"
           @input="onChange"
           ref="input"
           full-width
@@ -52,11 +53,12 @@ export type MyInputsListValue = {
 type MyInputsListProps = {
   id?: boolean;
   label?: string;
-  error?: string[];
+  errors?: string[];
   addText?: string;
 
   count: number;
   values: MyInputsListValue[];
+  inputsErrors: string[];
 
   onAdd(): void;
   onRemove(index: number): void;
@@ -77,8 +79,8 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
       type: String as PropType<string>,
       required: false,
     },
-    error: {
-      type: String as PropType<string>,
+    errors: {
+      type: Array as PropType<string[]>,
       required: false,
     },
     addText: {
@@ -90,21 +92,25 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
   data() {
     const data = (this.$attrs.value || []) as unknown as MyInputsListValue[];
     const count = data.length;
-    const values = count ? data.map((value) => value) : [{ label: "" }];
+    const values = data.map((value) => value);
+    const inputsErrors = (this.errors || []).map((error) => error || "");
 
     return {
-      count: count || 1,
+      count,
       values,
+      inputsErrors,
     };
   },
   methods: {
     onAdd() {
       this.count += 1;
       this.values.push({ label: "" });
+      this.inputsErrors.push("");
       this.emitChanges();
     },
     onRemove(index: number) {
       this.values.splice(index, 1);
+      this.inputsErrors.splice(index, 1);
       this.count -= 1;
       this.emitChanges();
     },
@@ -114,6 +120,7 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
         const value = el.value;
         const index = parseInt(el.dataset.index as string, 10);
         this.values[index].label = value;
+        this.inputsErrors[index] = "";
         this.emitChanges();
       }
     },
@@ -131,10 +138,13 @@ export default defineComponent<MyInputsListProps, MyInputsListProps>({
     "$attrs.value"() {
       const data = (this.$attrs.value || []) as unknown as MyInputsListValue[];
       const count = data.length;
-      const values = count ? data.map((value) => value) : [{ label: "" }];
+      const values = data.map((value) => value);
 
-      this.count = count || 1;
+      this.count = count;
       this.values = values;
+    },
+    errors() {
+      this.inputsErrors = (this.errors || []).map((error) => error);
     },
   },
 });

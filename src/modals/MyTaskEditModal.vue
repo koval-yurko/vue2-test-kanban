@@ -7,6 +7,7 @@
         <div class="my-modal-field">
           <my-input
             v-model="title"
+            :error="titleError"
             name="title"
             label="Title"
             placeholder="e.g. Take coffee break"
@@ -27,6 +28,7 @@
         <div class="my-modal-field">
           <my-inputs-list
             v-model="subtasks"
+            :errors="subtasksError"
             name="subtasks"
             label="Subtasks"
             add-text="+ Add New Subtask"
@@ -72,8 +74,10 @@ import type {
 
 type MyTaskEditModalProps = {
   title: string;
+  titleError: string;
   description: string;
   subtasks: MyInputsListValue[];
+  subtasksError: string[];
   status: string;
 
   isEdit?: boolean;
@@ -94,6 +98,7 @@ type MyTaskEditModalProps = {
   }) => Task;
   onClose: () => void;
   onSubmit: () => void;
+  isValid: () => boolean;
 };
 
 export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
@@ -116,8 +121,10 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
   data() {
     return {
       title: "",
+      titleError: "",
       description: "",
-      subtasks: [],
+      subtasks: [{ label: "" }],
+      subtasksError: [""],
       status: "",
       isEdit: false,
     };
@@ -143,12 +150,18 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
     onClose() {
       this.hideModal();
       this.title = "";
+      this.titleError = "";
       this.description = "";
-      this.subtasks = [];
+      this.subtasks = [{ label: "" }];
+      this.subtasksError = [""];
       this.status = "";
       this.isEdit = false;
     },
     async onSubmit() {
+      const isValid = this.isValid();
+      if (!isValid) {
+        return;
+      }
       if (!this.activeDashboard) {
         return;
       }
@@ -185,6 +198,29 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
         this.onClose();
       }
     },
+    isValid() {
+      let isValid = true;
+      if (!this.title) {
+        this.titleError = "Can’t be empty";
+        isValid = false;
+      }
+
+      const subtasksName: Record<string, boolean> = {};
+      const subtasksError = this.subtasks.map((subtask) => {
+        if (!subtask.label) {
+          isValid = false;
+          return "Can’t be empty";
+        }
+        if (subtasksName[subtask.label]) {
+          isValid = false;
+          return "Subtask is already exist";
+        }
+        subtasksName[subtask.label] = true;
+        return "";
+      });
+      this.subtasksError = subtasksError;
+      return isValid;
+    },
   },
   watch: {
     modalData() {
@@ -203,12 +239,15 @@ export default defineComponent<MyTaskEditModalProps, MyTaskEditModalProps>({
         this.isEdit = false;
         this.title = "";
         this.description = "";
-        this.subtasks = [];
+        this.subtasks = [{ label: "" }];
         const firstId = this.statusOptions.length
           ? this.statusOptions[0].id
           : "";
         this.status = firstId;
       }
+    },
+    title() {
+      this.titleError = "";
     },
   },
 });

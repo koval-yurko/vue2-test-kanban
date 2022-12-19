@@ -1,13 +1,14 @@
 <template>
   <my-modal :show="isShowed" @close="onClose">
-    <my-modal-box>
+    <my-modal-box v-if="modalData">
       <my-modal-header title="Delete this board?" color="destructive" />
 
       <form @submit.prevent="onSubmit">
         <div class="my-modal-text">
           <p>
-            Are you sure you want to delete the ‘Platform Launch’ board? This
-            action will remove all columns and tasks and cannot be reversed.
+            Are you sure you want to delete the ‘{{ modalData.name }}’ board?
+            This action will remove all columns and tasks and cannot be
+            reversed.
           </p>
         </div>
 
@@ -37,7 +38,7 @@ import { MODAL_DASHBOARD_DELETE } from "@/store/constants";
 import type { Dashboard } from "@/store/types";
 
 type MyDashboardEditModalProps = {
-  modalData: Dashboard;
+  modalData: Dashboard | undefined;
   isShowed: boolean;
   dashboards: Dashboard[];
   activeDashboard: Dashboard | undefined;
@@ -84,12 +85,11 @@ export default defineComponent<
       this.hideModal();
     },
     onSubmit() {
-      if (this.activeDashboard) {
-        this.deleteDashboard(this.activeDashboard.id);
-        this.setActiveDashboard(
-          this.dashboards[0] ? this.dashboards[0].id : ""
-        );
+      if (!this.activeDashboard || !this.modalData) {
+        return;
       }
+      this.deleteDashboard(this.activeDashboard.id);
+      this.setActiveDashboard(this.dashboards[0] ? this.dashboards[0].id : "");
       this.onClose();
     },
     onCancelClick() {

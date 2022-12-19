@@ -7,8 +7,9 @@
         <div class="my-modal-field">
           <my-input
             v-model="name"
-            name="name"
+            :error="nameError"
             :label="isEdit ? 'Board Name' : 'Name'"
+            name="name"
             placeholder="e.g. Web Design"
             full-width
           />
@@ -17,8 +18,9 @@
         <div class="my-modal-field">
           <my-inputs-list
             v-model="columns"
-            name="columns"
+            :errors="columnsError"
             :label="isEdit ? 'Board Columns' : 'Columns'"
+            name="columns"
             add-text="+ Add New Column"
           />
         </div>
@@ -48,7 +50,9 @@ import type { MyInputsListValue } from "@/components/form/MyInputsList";
 
 type MyDashboardEditModalProps = {
   name: string;
+  nameError: string;
   columns: MyInputsListValue[];
+  columnsError: string[];
   isEdit?: boolean;
 
   modalData: Dashboard | undefined;
@@ -60,6 +64,7 @@ type MyDashboardEditModalProps = {
   hideModal: () => void;
   onClose: () => void;
   onSubmit: () => void;
+  isValid: () => boolean;
 };
 
 export default defineComponent<
@@ -79,7 +84,9 @@ export default defineComponent<
   data() {
     return {
       name: "",
-      columns: [],
+      nameError: "",
+      columns: [{ label: "" }],
+      columnsError: [""],
       isEdit: false,
     };
   },
@@ -101,10 +108,17 @@ export default defineComponent<
     onClose() {
       this.hideModal();
       this.name = "";
-      this.columns = [];
+      this.nameError = "";
+      this.columns = [{ label: "" }];
+      this.columnsError = [""];
       this.isEdit = false;
     },
     async onSubmit() {
+      const isValid = this.isValid();
+      if (!isValid) {
+        return;
+      }
+
       if (this.modalData) {
         // edit
         const dashboard: DashboardEditDTO = {
@@ -127,6 +141,29 @@ export default defineComponent<
       }
       this.onClose();
     },
+    isValid() {
+      let isValid = true;
+      if (!this.name) {
+        this.nameError = "Can’t be empty";
+        isValid = false;
+      }
+
+      const columnsName: Record<string, boolean> = {};
+      const columnsError = this.columns.map((column) => {
+        if (!column.label) {
+          isValid = false;
+          return "Can’t be empty";
+        }
+        if (columnsName[column.label]) {
+          isValid = false;
+          return "Column is already exist";
+        }
+        columnsName[column.label] = true;
+        return "";
+      });
+      this.columnsError = columnsError;
+      return isValid;
+    },
   },
   watch: {
     modalData() {
@@ -141,8 +178,11 @@ export default defineComponent<
         });
       } else {
         this.name = "";
-        this.columns = [];
+        this.columns = [{ label: "" }];
       }
+    },
+    name() {
+      this.nameError = "";
     },
   },
 });
