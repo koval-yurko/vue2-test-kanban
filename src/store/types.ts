@@ -71,7 +71,8 @@ export type ThemeState = {
 };
 
 export type SidebarState = {
-  visible: boolean;
+  desktopVisible: boolean;
+  mobileVisible: boolean;
 };
 
 export type ModalsState = {

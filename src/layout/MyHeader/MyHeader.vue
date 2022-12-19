@@ -3,14 +3,29 @@
     <div class="my-header_content">
       <div
         class="my-header_logo-holder"
-        :class="{ 'my-header_logo-holder__wide': isSidebarVisible }"
+        :class="{ 'my-header_logo-holder__wide': isDesktopSidebarVisible }"
       >
         <my-logo-icon class="my-header_logo" />
       </div>
       <div class="my-header_menu-holder">
         <div class="my-header_title h1">
-          <span v-if="activeDashboard">{{ activeDashboard.name }}</span>
-          <span v-else>No Boards yet</span>
+          <span class="my-header_title-desktop">
+            <span v-if="activeDashboard">{{ activeDashboard.name }}</span>
+            <span v-else>No Boards yet</span>
+          </span>
+          <button
+            class="my-header_title-mobile h1"
+            :class="{
+              'my-header_title-mobile__opened': isMobileSidebarVisible,
+            }"
+            @click="onMobileTitleClick"
+          >
+            <span v-if="activeDashboard">{{ activeDashboard.name }}</span>
+            <span v-else>No Boards yet</span>
+            <my-arrow-down-icon
+              class="my-header_title-mobile_icon"
+            ></my-arrow-down-icon>
+          </button>
         </div>
         <div class="my-header_btns">
           <my-button
@@ -60,6 +75,7 @@ import { MyMenuButton } from "@/components/MyMenuButton";
 import { MyMenu, MyMenuList, MyMenuItem } from "@/components/MyMenu";
 import MyLogoIcon from "@/components/icons/MyLogoIcon.vue";
 import MyPlusIcon from "@/components/icons/MyPlusIcon.vue";
+import MyArrowDownIcon from "@/components/icons/MyArrowDownIcon.vue";
 import {
   MODAL_DASHBOARD_EDIT,
   MODAL_DASHBOARD_DELETE,
@@ -76,12 +92,15 @@ type MyHeaderProps = {
   size?: Size;
   color?: Color;
 
-  isSidebarVisible: boolean;
+  isDesktopSidebarVisible: boolean;
+  isMobileSidebarVisible: boolean;
   activeColumn: Column | undefined;
   activeDashboard: Dashboard | undefined;
 
   showModal: (opts: { name: string; data?: Dashboard }) => void;
+  toggleMobileSidebar: (force?: boolean) => void;
 
+  onMobileTitleClick: () => void;
   onAddTaskClick: () => void;
   onEditDashboardClick: () => void;
   onDeleteDashboardClick: () => void;
@@ -92,6 +111,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   components: {
     MyLogoIcon,
     MyPlusIcon,
+    MyArrowDownIcon,
     MyButton,
     MyMenuButton,
     MyMenu,
@@ -112,7 +132,8 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   },
   computed: {
     ...mapGetters({
-      isSidebarVisible: "sidebar/isSidebarVisible",
+      isDesktopSidebarVisible: "sidebar/isDesktopSidebarVisible",
+      isMobileSidebarVisible: "sidebar/isMobileSidebarVisible",
       activeColumn: "dashboards/activeColumn",
       activeDashboard: "dashboards/activeDashboard",
     }),
@@ -120,7 +141,11 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   methods: {
     ...mapActions({
       showModal: "modals/showModal",
+      toggleMobileSidebar: "sidebar/toggleMobileSidebar",
     }),
+    onMobileTitleClick() {
+      this.toggleMobileSidebar();
+    },
     onAddTaskClick() {
       this.showModal({
         name: MODAL_TASK_EDIT,
@@ -203,6 +228,28 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   margin-right: 20px;
 }
 
+.my-header_title-desktop {
+}
+
+.my-header_title-mobile {
+  display: none;
+  margin: 0;
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.my-header_title-mobile_icon {
+  margin-left: 4px;
+  color: var(--color-primary);
+}
+
+.my-header_title-mobile__opened .my-header_title-mobile_icon {
+  transform: rotate(180deg);
+}
+
 .my-header_btns {
   display: flex;
   align-items: center;
@@ -233,6 +280,14 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
 
   .my-header_title {
     padding-left: 0;
+  }
+
+  .my-header_title-desktop {
+    display: none;
+  }
+
+  .my-header_title-mobile {
+    display: inline;
   }
 
   .my-header_btn-add__desktop {

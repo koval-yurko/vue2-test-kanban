@@ -69,4 +69,21 @@ export default defineComponent<MyModalBoxProps, MyModalBoxProps>({
 .my-modal-controls .my-button:last-child {
   margin-right: 0;
 }
+
+/* Mobile */
+@media (max-width: 700px) {
+  .my-modal-controls {
+    flex-direction: column;
+  }
+
+  .my-modal-controls .my-button {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  .my-modal-controls .my-button:last-child {
+    margin-bottom: 0;
+  }
+}
 </style>

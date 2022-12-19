@@ -1,5 +1,12 @@
 <template>
-  <div class="my-sidebar" :class="{ 'my-sidebar__hidden': !isSidebarVisible }">
+  <div
+    class="my-sidebar"
+    :class="{
+      'my-sidebar__hidden': !isDesktopSidebarVisible,
+      'my-sidebar__showed': isMobileSidebarVisible,
+    }"
+  >
+    <div class="my-sidebar_spacer"></div>
     <div class="my-sidebar_content">
       <div class="my-sidebar_total h4">
         ALL BOARDS ({{ dashboards.length }})
@@ -10,14 +17,14 @@
             class="my-sidebar_menu-item"
             :class="{
               'my-sidebar_menu-item__active':
-                activeDashboard && activeDashboard.name === dashboard.name,
+                activeDashboard && activeDashboard.id === dashboard.id,
             }"
             v-for="dashboard of dashboards"
-            :key="dashboard.name"
+            :key="dashboard.id"
           >
             <button
               class="my-sidebar_menu-button"
-              @click="setActiveDashboard(dashboard.id)"
+              @click="onSidebarItemClick(dashboard.id)"
             >
               <my-board-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">{{
@@ -50,9 +57,12 @@
           <my-moon-icon />
         </div>
 
-        <ul class="my-sidebar_menu">
+        <ul class="my-sidebar_menu my-sidebar_menu__toggler">
           <li class="my-sidebar_menu-item">
-            <button class="my-sidebar_menu-button" @click="toggleSidebar">
+            <button
+              class="my-sidebar_menu-button"
+              @click="toggleDesktopSidebar"
+            >
               <my-eye-close-icon class="my-sidebar_menu-item-icon" />
               <span class="my-sidebar_menu-item-text h3">Hide Sidebar</span>
             </button>
@@ -60,12 +70,11 @@
         </ul>
       </div>
     </div>
-    <div class="my-sidebar_spacer"></div>
     <div class="my-sidebar_toggle-show">
       <my-button
         class="my-sidebar_toggle-button"
         size="large"
-        @click="toggleSidebar"
+        @click="toggleDesktopSidebar"
       >
         <my-eye-open-icon class="my-sidebar_menu-item-icon" />
       </my-button>
@@ -95,15 +104,19 @@ type MySidebarProps = {
   color?: Color;
 
   onAddNewDashboardClick: () => void;
-  isSidebarVisible: boolean;
+  isDesktopSidebarVisible: boolean;
+  isMobileSidebarVisible: boolean;
   theme: string;
   dashboards: Dashboard[];
   activeDashboard: Dashboard | undefined;
 
   setActiveDashboard: (id: string) => void;
-  toggleSidebar: () => void;
+  toggleDesktopSidebar: () => void;
+  toggleMobileSidebar: (force?: boolean) => void;
   toggleTheme: () => void;
   showModal: (opts: { name: string }) => void;
+
+  onSidebarItemClick: (dashboardId: string) => void;
 };
 
 export default defineComponent<MySidebarProps, MySidebarProps>({
@@ -130,7 +143,8 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
   },
   computed: {
     ...mapGetters({
-      isSidebarVisible: "sidebar/isSidebarVisible",
+      isDesktopSidebarVisible: "sidebar/isDesktopSidebarVisible",
+      isMobileSidebarVisible: "sidebar/isMobileSidebarVisible",
       theme: "theme/activeTheme",
       dashboards: "dashboards/dashboards",
       activeDashboard: "dashboards/activeDashboard",
@@ -138,7 +152,8 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
   },
   methods: {
     ...mapActions({
-      toggleSidebar: "sidebar/toggleSidebar",
+      toggleDesktopSidebar: "sidebar/toggleDesktopSidebar",
+      toggleMobileSidebar: "sidebar/toggleMobileSidebar",
       toggleTheme: "theme/toggleTheme",
       showModal: "modals/showModal",
       setActiveDashboard: "dashboards/setActiveDashboard",
@@ -147,6 +162,11 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
       this.showModal({
         name: MODAL_DASHBOARD_EDIT,
       });
+      this.toggleMobileSidebar(false);
+    },
+    onSidebarItemClick(dashboardId: string) {
+      this.setActiveDashboard(dashboardId);
+      this.toggleMobileSidebar(false);
     },
   },
 });
@@ -180,7 +200,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
 
 .my-sidebar_total {
   flex-shrink: 0;
-  padding: 19px 32px 19px 32px;
+  padding: 19px 32px;
   color: var(--sidebar-menu-color);
 }
 
@@ -230,6 +250,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
 }
 
 .my-sidebar_menu-item-icon {
+  flex-shrink: 0;
   margin-right: 14px;
 }
 
@@ -303,7 +324,75 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
 /* Mobile */
 @media (max-width: 700px) {
   .my-sidebar {
+    position: fixed;
+    top: var(--header-height);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    max-height: 100%;
+    padding: 16px 40px;
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity 0.1s ease;
+  }
+
+  .my-sidebar_content {
+    position: relative;
+    top: 0;
+    max-height: calc(100% - 32px);
+    width: 100%;
+    padding-bottom: 5px;
+    max-width: var(--sidebar-width);
+    border-right: none;
+    border-radius: 8px;
+    transform: translateY(10px);
+
+    transition: transform 0.1s ease;
+  }
+  .my-sidebar__hidden .my-sidebar_content {
+    left: 0;
+  }
+
+  .my-sidebar_spacer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: var(--modal-overlay-bg-color);
+    opacity: 0.5;
+  }
+  .my-sidebar__hidden .my-sidebar_spacer {
+    width: 100%;
+  }
+
+  .my-sidebar_total {
+    padding: 19px 15px;
+  }
+
+  .my-sidebar_menu-button {
+    padding: 14px 15px 15px 15px;
+  }
+
+  .my-sidebar_theme-toggle {
+    margin: 10px 15px;
+  }
+
+  .my-sidebar_menu__toggler,
+  .my-sidebar_toggle-show {
     display: none;
+  }
+
+  .my-sidebar__showed {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .my-sidebar__showed .my-sidebar_content {
+    transform: translateY(0px);
   }
 }
 </style>

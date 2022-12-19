@@ -95,6 +95,7 @@
   --task-title-color-hover: var(--color-primary);
   --task-description-color: var(--color-gray-4);
 
+  --add-column-opacity: 1;
   --add-column-bg-color: var(--color-gray-3);
   --add-column-color: var(--color-gray-4);
   --add-column-color-hover: var(--color-primary);
@@ -144,6 +145,9 @@
 
   --task-bg-color: var(--color-gray-1);
   --task-title-color: var(--color-gray-8);
+
+  --add-column-opacity: 1;
+  --add-column-bg-color: var(--color-gray-3);
 }
 
 :root[data-theme="black"],
@@ -183,6 +187,9 @@
 
   --task-bg-color: var(--color-gray-6);
   --task-title-color: var(--color-gray-1);
+
+  --add-column-opacity: 0.6;
+  --add-column-bg-color: var(--color-gray-6);
 }
 
 @font-face {

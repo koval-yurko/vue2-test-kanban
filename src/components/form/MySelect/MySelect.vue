@@ -21,7 +21,7 @@
           {{ option.label }}
         </option>
       </select>
-      <my-select-icon class="my-select_input-icon"></my-select-icon>
+      <my-arrow-down-icon class="my-select_input-icon"></my-arrow-down-icon>
       <span v-if="error" class="my-select_error">{{ error }}</span>
     </div>
   </div>
@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import MySelectIcon from "@/components/icons/MySelectIcon.vue";
+import MyArrowDownIcon from "@/components/icons/MyArrowDownIcon.vue";
 
 export type MySelectOption = {
   id: string;
@@ -51,7 +51,7 @@ type MySelectProps = {
 
 export default defineComponent<MySelectProps, MySelectProps>({
   name: "MySelect",
-  components: { MySelectIcon },
+  components: { MyArrowDownIcon },
   props: {
     id: {
       type: String as PropType<string>,

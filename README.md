@@ -24,5 +24,4 @@ https://failwin.github.io/vue2-test-kanban/index.html#/demo
 
 
 ## TODO
-* mobile menu
 * drag & drop

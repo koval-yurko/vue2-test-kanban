@@ -50,6 +50,7 @@ export default defineComponent<MyBoardAddColumnProps, MyBoardAddColumnProps>({
   justify-content: stretch;
   align-items: stretch;
   max-height: 90vh;
+  opacity: var(--add-column-opacity);
 }
 
 .my-board-column_button {

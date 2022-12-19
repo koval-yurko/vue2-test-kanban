@@ -21,9 +21,19 @@ const MUTATION_TASK_ADD = "MUTATION_TASK_ADD";
 
 type DashboardsContext = ActionContext<DashboardsState, RootState>;
 
-const saveState = (state: DashboardsState): void => {
+const saveDashboardsState = (state: DashboardsState): void => {
   const dashboardsStr = JSON.stringify(state.dashboards);
-  window.localStorage["kanbanState"] = dashboardsStr;
+  window.localStorage["kanbanState-dashboards"] = dashboardsStr;
+};
+
+const getDashboardsState = (): Dashboard[] => {
+  const dashboardsStr = window.localStorage["kanbanState-dashboards"] || "[]";
+  try {
+    const dashboards = JSON.parse(dashboardsStr);
+    return dashboards;
+  } catch (err) {
+    return [];
+  }
 };
 
 export default {
@@ -46,7 +56,7 @@ export default {
     },
     [MUTATION_DASHBOARD_ADD](state: DashboardsState, payload: Dashboard) {
       state.dashboards = [...state.dashboards, payload];
-      saveState(state);
+      saveDashboardsState(state);
     },
     [MUTATION_DASHBOARD_EDIT](
       state: DashboardsState,
@@ -58,13 +68,13 @@ export default {
         }
         return dashboard;
       });
-      saveState(state);
+      saveDashboardsState(state);
     },
     [MUTATION_DASHBOARD_DELETE](state: DashboardsState, id: string) {
       state.dashboards = state.dashboards.filter((dashboard) => {
         return dashboard.id !== id;
       });
-      saveState(state);
+      saveDashboardsState(state);
     },
     [MUTATION_TASK_ADD](
       state: DashboardsState,
@@ -86,13 +96,12 @@ export default {
         }
         return dashboard;
       });
-      saveState(state);
+      saveDashboardsState(state);
     },
   },
   actions: {
     loadDashboards(context: DashboardsContext) {
-      const dashboardsStr = window.localStorage["kanbanState"] || "[]";
-      const dashboards = JSON.parse(dashboardsStr);
+      const dashboards = getDashboardsState();
       context.commit(MUTATION_DASHBOARDS_LOAD, dashboards);
       if (dashboards.length) {
         context.commit(MUTATION_DASHBOARD_SET_ACTIVE, dashboards[0]);
