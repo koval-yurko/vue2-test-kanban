@@ -14,16 +14,8 @@
 
         <my-board-columns
           v-if="activeDashboard && activeDashboard.columns.length"
-        >
-          <my-board-column
-            v-for="column of activeDashboard.columns"
-            :key="column.id"
-            :column="column"
-          >
-            <my-task v-for="task of column.tasks" :key="task.id" :task="task" />
-          </my-board-column>
-          <my-board-add-column />
-        </my-board-columns>
+          :columns="activeDashboard.columns"
+        />
       </div>
     </div>
 
@@ -42,12 +34,7 @@ import { MyHeader } from "@/layout/MyHeader";
 import { MySidebar } from "@/layout/MySidebar";
 import { MyAddBoard } from "@/components/MyAddBoard";
 import { MyEmptyBoard } from "@/components/MyEmptyBoard";
-import {
-  MyBoardColumns,
-  MyBoardColumn,
-  MyBoardAddColumn,
-} from "@/components/MyBoardColumns";
-import { MyTask } from "@/components/MyTask";
+import { MyBoardColumns } from "@/components/MyBoardColumns";
 import MyDashboardEditModal from "@/modals/MyDashboardEditModal.vue";
 import MyDashboardDeleteModal from "@/modals/MyDashboardDeleteModal.vue";
 import MyTaskShowModal from "@/modals/MyTaskShowModal.vue";
@@ -63,9 +50,6 @@ export default defineComponent({
     MyAddBoard,
     MyEmptyBoard,
     MyBoardColumns,
-    MyBoardColumn,
-    MyBoardAddColumn,
-    MyTask,
 
     MyDashboardEditModal,
     MyDashboardDeleteModal,
@@ -85,6 +69,9 @@ export default defineComponent({
     ...mapActions({
       loadDashboards: "dashboards/loadDashboards",
     }),
+    onMove(evt: any, originalEvent: any) {
+      console.log(evt, originalEvent);
+    },
   },
 });
 </script>

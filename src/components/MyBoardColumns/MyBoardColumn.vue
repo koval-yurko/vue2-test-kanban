@@ -34,6 +34,8 @@ export default defineComponent<MyBoardColumnProps, MyBoardColumnProps>({
 
 <style>
 .my-board-column {
+  display: flex;
+  flex-direction: column;
   width: 304px;
   padding: 24px 12px;
   flex-shrink: 0;
@@ -54,5 +56,11 @@ export default defineComponent<MyBoardColumnProps, MyBoardColumnProps>({
   margin: 0 6px -3px 0;
   border-radius: 50%;
   background: var(--color-primary);
+}
+
+.my-board-column > div:last-child {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 </style>
