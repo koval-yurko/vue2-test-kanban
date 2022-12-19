@@ -1,5 +1,5 @@
 <template>
-  <div class="my-sidebar" :class="{ 'my-sidebar__hidden': !sidebarVisible }">
+  <div class="my-sidebar" :class="{ 'my-sidebar__hidden': !isSidebarVisible }">
     <div class="my-sidebar_content">
       <div class="my-sidebar_total h4">
         ALL BOARDS ({{ dashboards.length }})
@@ -95,7 +95,7 @@ type MySidebarProps = {
   color?: Color;
 
   onAddNewDashboardClick: () => void;
-  sidebarVisible: boolean;
+  isSidebarVisible: boolean;
   theme: string;
   dashboards: Dashboard[];
   activeDashboard: Dashboard | undefined;
@@ -130,7 +130,7 @@ export default defineComponent<MySidebarProps, MySidebarProps>({
   },
   computed: {
     ...mapGetters({
-      sidebarVisible: "sidebar/isVisible",
+      isSidebarVisible: "sidebar/isSidebarVisible",
       theme: "theme/activeTheme",
       dashboards: "dashboards/dashboards",
       activeDashboard: "dashboards/activeDashboard",

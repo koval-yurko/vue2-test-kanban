@@ -3,7 +3,7 @@
     <div class="my-header_content">
       <div
         class="my-header_logo-holder"
-        :class="{ 'my-header_logo-holder__wide': sidebarVisible }"
+        :class="{ 'my-header_logo-holder__wide': isSidebarVisible }"
       >
         <my-logo-icon class="my-header_logo" />
       </div>
@@ -76,7 +76,7 @@ type MyHeaderProps = {
   size?: Size;
   color?: Color;
 
-  sidebarVisible: boolean;
+  isSidebarVisible: boolean;
   activeColumn: Column | undefined;
   activeDashboard: Dashboard | undefined;
 
@@ -112,7 +112,7 @@ export default defineComponent<MyHeaderProps, MyHeaderProps>({
   },
   computed: {
     ...mapGetters({
-      sidebarVisible: "sidebar/isVisible",
+      isSidebarVisible: "sidebar/isSidebarVisible",
       activeColumn: "dashboards/activeColumn",
       activeDashboard: "dashboards/activeDashboard",
     }),
