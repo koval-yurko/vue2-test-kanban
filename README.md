@@ -17,11 +17,7 @@ dev build
 ```
 
 ### Demo
-https://failwin.github.io/vue2-test-kanban/index.html#/
+https://koval-yurko.github.io/vue2-test-kanban/index.html#/
 
 ### Styleguide
-https://failwin.github.io/vue2-test-kanban/index.html#/demo
-
-
-## TODO
-* drag & drop
+https://koval-yurko.github.io/vue2-test-kanban/index.html#/demo
